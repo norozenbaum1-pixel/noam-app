@@ -2,27 +2,25 @@
 <html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1, viewport-fit=cover"
-  />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#121826" />
-  <title>היום שלי</title>
+  <title>השבוע שלי</title>
 
   <style>
     :root {
       --bg-1: #0f172a;
       --bg-2: #182338;
-      --bg-3: #27344d;
-      --card-border: rgba(255, 255, 255, 0.14);
+      --bg-3: #25324a;
+      --card-bg: rgba(255,255,255,0.08);
+      --card-bg-2: rgba(255,255,255,0.05);
+      --card-border: rgba(255,255,255,0.12);
       --text: #f8fafc;
-      --muted: rgba(248, 250, 252, 0.72);
-      --shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
+      --muted: rgba(248,250,252,0.72);
+      --shadow: 0 18px 40px rgba(0,0,0,0.22);
+      --green: #22c55e;
       --red: #ef4444;
       --yellow: #f59e0b;
-      --green: #22c55e;
-      --glass-1: rgba(255,255,255,0.08);
-      --glass-2: rgba(255,255,255,0.05);
+      --white: #ffffff;
     }
 
     * {
@@ -35,9 +33,9 @@
       padding: 0;
       min-height: 100%;
       background:
-        radial-gradient(circle at top right, rgba(96, 165, 250, 0.16), transparent 28%),
-        radial-gradient(circle at bottom left, rgba(168, 85, 247, 0.12), transparent 30%),
-        linear-gradient(160deg, var(--bg-1) 0%, var(--bg-2) 52%, var(--bg-3) 100%);
+        radial-gradient(circle at top right, rgba(59,130,246,0.14), transparent 28%),
+        radial-gradient(circle at bottom left, rgba(168,85,247,0.10), transparent 30%),
+        linear-gradient(160deg, var(--bg-1) 0%, var(--bg-2) 50%, var(--bg-3) 100%);
       background-attachment: fixed;
     }
 
@@ -47,13 +45,7 @@
       min-height: 100vh;
       min-height: 100dvh;
       color: var(--text);
-      font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "SF Pro Display",
-        "Segoe UI",
-        Arial,
-        sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Arial, sans-serif;
       background: transparent;
     }
 
@@ -61,13 +53,13 @@
       min-height: 100vh;
       min-height: 100dvh;
       padding-top: calc(env(safe-area-inset-top) + 18px);
-      padding-bottom: calc(env(safe-area-inset-bottom) + 22px);
+      padding-bottom: calc(env(safe-area-inset-bottom) + 24px);
       padding-left: 16px;
       padding-right: 16px;
       background:
-        radial-gradient(circle at top right, rgba(96, 165, 250, 0.16), transparent 28%),
-        radial-gradient(circle at bottom left, rgba(168, 85, 247, 0.12), transparent 30%),
-        linear-gradient(160deg, var(--bg-1) 0%, var(--bg-2) 52%, var(--bg-3) 100%);
+        radial-gradient(circle at top right, rgba(59,130,246,0.14), transparent 28%),
+        radial-gradient(circle at bottom left, rgba(168,85,247,0.10), transparent 30%),
+        linear-gradient(160deg, var(--bg-1) 0%, var(--bg-2) 50%, var(--bg-3) 100%);
     }
 
     .hidden {
@@ -85,9 +77,9 @@
       font-size: 52px;
       line-height: 1;
       font-weight: 900;
-      letter-spacing: -1.4px;
-      margin: 12px 0 26px;
-      text-shadow: 0 8px 24px rgba(0, 0, 0, 0.24);
+      letter-spacing: -1.5px;
+      margin: 10px 0 26px;
+      text-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
     }
 
     .cards-grid {
@@ -98,10 +90,10 @@
 
     .home-card {
       position: relative;
-      min-height: 128px;
+      min-height: 126px;
       border-radius: 28px;
-      padding: 18px 16px;
-      background: linear-gradient(180deg, var(--glass-1), var(--glass-2));
+      padding: 18px 14px;
+      background: linear-gradient(180deg, var(--card-bg), var(--card-bg-2));
       border: 1px solid var(--card-border);
       box-shadow: var(--shadow);
       backdrop-filter: blur(14px);
@@ -112,7 +104,7 @@
       align-items: center;
       text-align: center;
       overflow: hidden;
-      transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+      transition: transform 0.18s ease, border-color 0.18s ease;
       cursor: pointer;
     }
 
@@ -120,7 +112,7 @@
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(135deg, rgba(255,255,255,0.06), transparent 55%);
+      background: linear-gradient(135deg, rgba(255,255,255,0.06), transparent 58%);
       pointer-events: none;
     }
 
@@ -131,7 +123,7 @@
     .home-card-title {
       position: relative;
       z-index: 1;
-      font-size: 19px;
+      font-size: 20px;
       font-weight: 800;
       margin-bottom: 8px;
     }
@@ -142,13 +134,6 @@
       font-size: 15px;
       color: var(--muted);
       font-weight: 500;
-    }
-
-    .active-card {
-      border-color: rgba(255,255,255,0.22);
-      box-shadow:
-        0 18px 40px rgba(0, 0, 0, 0.24),
-        0 0 0 1px rgba(255,255,255,0.05) inset;
     }
 
     .top-row {
@@ -163,15 +148,15 @@
       height: 44px;
       border-radius: 999px;
       border: none;
-      background: #ffffff;
-      color: #9ca3af;
+      background: #fff;
+      color: #94a3b8;
       font-size: 24px;
-      font-weight: 800;
-      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
-      cursor: pointer;
+      font-weight: 900;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.22);
       display: flex;
       align-items: center;
       justify-content: center;
+      cursor: pointer;
     }
 
     .page-title {
@@ -181,7 +166,7 @@
       font-weight: 900;
       letter-spacing: -1px;
       margin: 6px 0 24px;
-      text-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+      text-shadow: 0 8px 24px rgba(0,0,0,0.22);
     }
 
     .workout-list,
@@ -193,9 +178,9 @@
 
     .workout-row,
     .bonus-row,
+    .progress-box,
     .trade-day-card,
-    .summary-box,
-    .progress-box {
+    .summary-box {
       border-radius: 24px;
       background: linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.06));
       border: 1px solid var(--card-border);
@@ -217,7 +202,8 @@
 
     .workout-row:active,
     .bonus-row:active,
-    .trade-toggle:active,
+    .trade-day-header:active,
+    .trade-toggle-btn:active,
     .trade-color-btn:active {
       transform: scale(0.988);
     }
@@ -253,9 +239,8 @@
     .done .check-circle {
       color: white;
       border-color: rgba(255,255,255,0.25);
-      background: rgba(34, 197, 94, 0.85);
-      transform: scale(1.05);
-      box-shadow: 0 8px 20px rgba(34, 197, 94, 0.28);
+      background: rgba(34,197,94,0.9);
+      box-shadow: 0 8px 20px rgba(34,197,94,0.28);
     }
 
     .row-title {
@@ -321,21 +306,55 @@
     }
 
     .trade-day-card {
-      padding: 16px;
+      overflow: hidden;
+      transition: 0.25s ease;
+    }
+
+    .trade-day-header {
+      min-height: 74px;
+      padding: 0 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
     }
 
     .trade-day-title {
       font-size: 24px;
       font-weight: 900;
-      margin-bottom: 14px;
+    }
+
+    .trade-day-arrow {
+      font-size: 22px;
+      color: var(--muted);
+      transition: transform 0.22s ease;
+    }
+
+    .trade-day-card.open .trade-day-arrow {
+      transform: rotate(180deg);
+    }
+
+    .trade-day-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.32s ease;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .trade-day-card.open .trade-day-body {
+      max-height: 700px;
+    }
+
+    .trade-day-inner {
+      padding: 14px 16px 16px;
     }
 
     .trade-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 12px;
-      padding: 10px 0;
+      gap: 10px;
+      padding: 12px 0;
       border-bottom: 1px solid rgba(255,255,255,0.08);
     }
 
@@ -355,10 +374,10 @@
       flex-wrap: wrap;
     }
 
-    .trade-toggle,
+    .trade-toggle-btn,
     .trade-color-btn {
       border: none;
-      min-width: 58px;
+      min-width: 54px;
       height: 36px;
       padding: 0 12px;
       border-radius: 999px;
@@ -369,19 +388,24 @@
       transition: 0.2s ease;
     }
 
-    .trade-toggle.active {
-      background: rgba(34, 197, 94, 0.9);
-      box-shadow: 0 8px 20px rgba(34, 197, 94, 0.25);
+    .trade-toggle-btn.active-yes {
+      background: rgba(34,197,94,0.92);
+      box-shadow: 0 8px 20px rgba(34,197,94,0.25);
+    }
+
+    .trade-toggle-btn.active-no {
+      background: rgba(239,68,68,0.92);
+      box-shadow: 0 8px 20px rgba(239,68,68,0.25);
     }
 
     .trade-color-btn.green.active {
-      background: rgba(34, 197, 94, 0.92);
-      box-shadow: 0 8px 20px rgba(34, 197, 94, 0.25);
+      background: rgba(34,197,94,0.92);
+      box-shadow: 0 8px 20px rgba(34,197,94,0.25);
     }
 
     .trade-color-btn.red.active {
-      background: rgba(239, 68, 68, 0.92);
-      box-shadow: 0 8px 20px rgba(239, 68, 68, 0.25);
+      background: rgba(239,68,68,0.92);
+      box-shadow: 0 8px 20px rgba(239,68,68,0.25);
     }
 
     .trade-note {
@@ -390,11 +414,11 @@
       border: 1px solid rgba(255,255,255,0.12);
       background: rgba(255,255,255,0.08);
       border-radius: 18px;
-      padding: 14px 14px;
+      padding: 14px;
       color: white;
       font-size: 15px;
       resize: vertical;
-      min-height: 78px;
+      min-height: 82px;
       outline: none;
       font-family: inherit;
     }
@@ -441,43 +465,28 @@
       font-weight: 600;
     }
 
-    .footer-space {
-      height: 10px;
-    }
-
     @media (max-width: 390px) {
-      .home-title {
-        font-size: 46px;
-      }
-
-      .page-title {
-        font-size: 34px;
-      }
-
-      .home-card {
-        min-height: 118px;
-      }
-
-      .trade-label {
-        font-size: 15px;
-      }
+      .home-title { font-size: 46px; }
+      .page-title { font-size: 34px; }
+      .home-card { min-height: 118px; }
+      .trade-label { font-size: 15px; }
     }
   </style>
 </head>
 <body>
   <div id="homePage" class="app-bg">
     <div class="container">
-      <div class="home-title">היום שלי</div>
+      <div class="home-title">השבוע שלי</div>
 
       <div class="cards-grid">
-        <div class="home-card active-card" onclick="openWorkouts()">
+        <div class="home-card" onclick="openWorkouts()">
           <div class="home-card-title">אימונים</div>
           <div class="home-card-sub"><span id="homeCounter">0</span>/3 השבוע</div>
         </div>
 
-        <div class="home-card active-card" onclick="openTrading()">
+        <div class="home-card" onclick="openTrading()">
           <div class="home-card-title">מסחר</div>
-          <div class="home-card-sub"><span id="tradeDaysCount">0</span> ימי מסחר</div>
+          <div class="home-card-sub"><span id="tradeDaysCount">0</span>/5 סחרתי</div>
         </div>
 
         <div class="home-card">
@@ -510,8 +519,6 @@
           <div class="home-card-sub">בקרוב</div>
         </div>
       </div>
-
-      <div class="footer-space"></div>
     </div>
   </div>
 
@@ -594,19 +601,19 @@
         <div class="summary-title">סיכום שבועי</div>
         <div class="summary-grid">
           <div class="summary-stat">
-            <div id="sumTraded" class="summary-number">0</div>
+            <div id="sumTraded" class="summary-number">0/5</div>
             <div class="summary-label">סחרתי</div>
           </div>
           <div class="summary-stat">
-            <div id="sumSetup" class="summary-number">0</div>
+            <div id="sumSetup" class="summary-number">0/5</div>
             <div class="summary-label">פעלתי לפי הסטאפ</div>
           </div>
           <div class="summary-stat">
-            <div id="sumGreen" class="summary-number">0</div>
+            <div id="sumGreen" class="summary-number">0/5</div>
             <div class="summary-label">ימים ירוקים</div>
           </div>
           <div class="summary-stat">
-            <div id="sumHappy" class="summary-number">0</div>
+            <div id="sumHappy" class="summary-number">0/5</div>
             <div class="summary-label">מרוצה מעצמי</div>
           </div>
         </div>
@@ -615,14 +622,18 @@
   </div>
 
   <script>
-    const WORKOUTS_KEY = "noam_workouts_v4";
-    const BONUS_KEY = "noam_bonus_v4";
-    const TRADE_KEY = "noam_trade_v1";
+    const WORKOUTS_KEY = "noam_workouts_v5";
+    const BONUS_KEY = "noam_bonus_v5";
+    const TRADE_KEY = "noam_trade_v2";
     const TRADE_DAYS = ["שני", "שלישי", "רביעי", "חמישי", "שישי"];
 
     let workouts = JSON.parse(localStorage.getItem(WORKOUTS_KEY)) || [false, false, false];
     let bonusDone = JSON.parse(localStorage.getItem(BONUS_KEY)) || false;
     let tradeData = JSON.parse(localStorage.getItem(TRADE_KEY)) || {};
+
+    function getCssVar(name) {
+      return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    }
 
     function saveWorkoutData() {
       localStorage.setItem(WORKOUTS_KEY, JSON.stringify(workouts));
@@ -637,14 +648,10 @@
       return workouts.filter(Boolean).length;
     }
 
-    function getProgressColor(count) {
+    function getWorkoutProgressColor(count) {
       if (count <= 1) return getCssVar("--red");
       if (count === 2) return getCssVar("--yellow");
       return getCssVar("--green");
-    }
-
-    function getCssVar(name) {
-      return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
     }
 
     function updateWorkoutUI() {
@@ -664,7 +671,7 @@
 
       const progressFill = document.getElementById("progressFill");
       progressFill.style.width = Math.min((count / 3) * 100, 100) + "%";
-      progressFill.style.background = getProgressColor(count);
+      progressFill.style.background = getWorkoutProgressColor(count);
 
       const bonusRow = document.getElementById("bonusRow");
       const bonusMessage = document.getElementById("bonusMessage");
@@ -706,25 +713,26 @@
     function ensureTradeDay(day) {
       if (!tradeData[day]) {
         tradeData[day] = {
-          traded: false,
-          setup: false,
+          open: false,
+          traded: "",
+          setup: "",
           color: "",
-          happy: false,
+          happy: "",
           note: ""
         };
       }
     }
 
-    function toggleTrade(day, key) {
+    function toggleTradeDay(day) {
       ensureTradeDay(day);
-      tradeData[day][key] = !tradeData[day][key];
+      tradeData[day].open = !tradeData[day].open;
       saveTradeData();
       renderTrading();
     }
 
-    function setTradeColor(day, color) {
+    function setTradeValue(day, key, value) {
       ensureTradeDay(day);
-      tradeData[day].color = color;
+      tradeData[day][key] = value;
       saveTradeData();
       renderTrading();
     }
@@ -744,11 +752,10 @@
       TRADE_DAYS.forEach(day => {
         ensureTradeDay(day);
         const d = tradeData[day];
-
-        if (d.traded) traded++;
-        if (d.setup) setup++;
+        if (d.traded === "yes") traded++;
+        if (d.setup === "yes") setup++;
         if (d.color === "green") green++;
-        if (d.happy) happy++;
+        if (d.happy === "yes") happy++;
       });
 
       return { traded, setup, green, happy };
@@ -763,49 +770,54 @@
         const d = tradeData[day];
 
         html += `
-          <div class="trade-day-card">
-            <div class="trade-day-title">${day}</div>
-
-            <div class="trade-item">
-              <div class="trade-label">סחרתי היום</div>
-              <div class="trade-actions">
-                <button class="trade-toggle ${d.traded ? 'active' : ''}" onclick="toggleTrade('${day}','traded')">
-                  ${d.traded ? '✓' : 'לא'}
-                </button>
-              </div>
+          <div class="trade-day-card ${d.open ? 'open' : ''}">
+            <div class="trade-day-header" onclick="toggleTradeDay('${day}')">
+              <div class="trade-day-title">${day}</div>
+              <div class="trade-day-arrow">⌄</div>
             </div>
 
-            <div class="trade-item">
-              <div class="trade-label">פעלתי לפי הסטאפ</div>
-              <div class="trade-actions">
-                <button class="trade-toggle ${d.setup ? 'active' : ''}" onclick="toggleTrade('${day}','setup')">
-                  ${d.setup ? '✓' : 'לא'}
-                </button>
+            <div class="trade-day-body">
+              <div class="trade-day-inner">
+                <div class="trade-item">
+                  <div class="trade-label">סחרתי היום</div>
+                  <div class="trade-actions">
+                    <button class="trade-toggle-btn ${d.traded === 'yes' ? 'active-yes' : ''}" onclick="event.stopPropagation(); setTradeValue('${day}','traded','yes')">כן</button>
+                    <button class="trade-toggle-btn ${d.traded === 'no' ? 'active-no' : ''}" onclick="event.stopPropagation(); setTradeValue('${day}','traded','no')">לא</button>
+                  </div>
+                </div>
+
+                <div class="trade-item">
+                  <div class="trade-label">פעלתי לפי הסטאפ</div>
+                  <div class="trade-actions">
+                    <button class="trade-toggle-btn ${d.setup === 'yes' ? 'active-yes' : ''}" onclick="event.stopPropagation(); setTradeValue('${day}','setup','yes')">כן</button>
+                    <button class="trade-toggle-btn ${d.setup === 'no' ? 'active-no' : ''}" onclick="event.stopPropagation(); setTradeValue('${day}','setup','no')">לא</button>
+                  </div>
+                </div>
+
+                <div class="trade-item">
+                  <div class="trade-label">יום ירוק או אדום</div>
+                  <div class="trade-actions">
+                    <button class="trade-color-btn green ${d.color === 'green' ? 'active' : ''}" onclick="event.stopPropagation(); setTradeValue('${day}','color','green')">ירוק</button>
+                    <button class="trade-color-btn red ${d.color === 'red' ? 'active' : ''}" onclick="event.stopPropagation(); setTradeValue('${day}','color','red')">אדום</button>
+                  </div>
+                </div>
+
+                <div class="trade-item">
+                  <div class="trade-label">מרוצה מעצמי</div>
+                  <div class="trade-actions">
+                    <button class="trade-toggle-btn ${d.happy === 'yes' ? 'active-yes' : ''}" onclick="event.stopPropagation(); setTradeValue('${day}','happy','yes')">כן</button>
+                    <button class="trade-toggle-btn ${d.happy === 'no' ? 'active-no' : ''}" onclick="event.stopPropagation(); setTradeValue('${day}','happy','no')">לא</button>
+                  </div>
+                </div>
+
+                <textarea
+                  class="trade-note"
+                  placeholder="הערה אופציונלית..."
+                  oninput="setTradeNote('${day}', this.value)"
+                  onclick="event.stopPropagation()"
+                >${escapeHtml(d.note || "")}</textarea>
               </div>
             </div>
-
-            <div class="trade-item">
-              <div class="trade-label">יום ירוק או אדום</div>
-              <div class="trade-actions">
-                <button class="trade-color-btn green ${d.color === 'green' ? 'active' : ''}" onclick="setTradeColor('${day}','green')">ירוק</button>
-                <button class="trade-color-btn red ${d.color === 'red' ? 'active' : ''}" onclick="setTradeColor('${day}','red')">אדום</button>
-              </div>
-            </div>
-
-            <div class="trade-item">
-              <div class="trade-label">מרוצה מעצמי</div>
-              <div class="trade-actions">
-                <button class="trade-toggle ${d.happy ? 'active' : ''}" onclick="toggleTrade('${day}','happy')">
-                  ${d.happy ? '✓' : 'לא'}
-                </button>
-              </div>
-            </div>
-
-            <textarea
-              class="trade-note"
-              placeholder="הערה אופציונלית..."
-              oninput="setTradeNote('${day}', this.value)"
-            >${escapeHtml(d.note || "")}</textarea>
           </div>
         `;
       });
@@ -813,10 +825,10 @@
       wrap.innerHTML = html;
 
       const summary = getTradeSummary();
-      document.getElementById("sumTraded").textContent = summary.traded;
-      document.getElementById("sumSetup").textContent = summary.setup;
-      document.getElementById("sumGreen").textContent = summary.green;
-      document.getElementById("sumHappy").textContent = summary.happy;
+      document.getElementById("sumTraded").textContent = summary.traded + "/5";
+      document.getElementById("sumSetup").textContent = summary.setup + "/5";
+      document.getElementById("sumGreen").textContent = summary.green + "/5";
+      document.getElementById("sumHappy").textContent = summary.happy + "/5";
       document.getElementById("tradeDaysCount").textContent = summary.traded;
     }
 
