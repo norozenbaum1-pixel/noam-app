@@ -1,261 +1,460 @@
 <!DOCTYPE html>
-<html lang="he">
+<html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  />
+  <meta name="theme-color" content="#121826" />
   <title>היום שלי</title>
+
   <style>
+    :root {
+      --bg-1: #0f172a;
+      --bg-2: #182338;
+      --bg-3: #27344d;
+      --card: rgba(255, 255, 255, 0.08);
+      --card-border: rgba(255, 255, 255, 0.14);
+      --text: #f8fafc;
+      --muted: rgba(248, 250, 252, 0.72);
+      --shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
+      --red: #ef4444;
+      --yellow: #f59e0b;
+      --green: #22c55e;
+    }
+
     * {
       box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at top right, rgba(96, 165, 250, 0.16), transparent 28%),
+        radial-gradient(circle at bottom left, rgba(168, 85, 247, 0.12), transparent 30%),
+        linear-gradient(160deg, var(--bg-1) 0%, var(--bg-2) 52%, var(--bg-3) 100%);
+      background-attachment: fixed;
     }
 
     body {
       margin: 0;
-      font-family: "Segoe UI", Arial, sans-serif;
-      direction: rtl;
-      background: linear-gradient(135deg, #6a5cff 0%, #8b5cf6 35%, #ec4899 70%, #22c55e 100%);
+      padding: 0;
       min-height: 100vh;
-      color: white;
+      min-height: 100dvh;
+      color: var(--text);
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "Segoe UI",
+        Arial,
+        sans-serif;
+      background: transparent;
     }
 
-    .page {
+    .app-bg {
       min-height: 100vh;
-      padding: 24px 18px 32px;
+      min-height: 100dvh;
+      padding-top: calc(env(safe-area-inset-top) + 18px);
+      padding-bottom: calc(env(safe-area-inset-bottom) + 22px);
+      padding-left: 16px;
+      padding-right: 16px;
+      background:
+        radial-gradient(circle at top right, rgba(96, 165, 250, 0.16), transparent 28%),
+        radial-gradient(circle at bottom left, rgba(168, 85, 247, 0.12), transparent 30%),
+        linear-gradient(160deg, var(--bg-1) 0%, var(--bg-2) 52%, var(--bg-3) 100%);
     }
 
     .hidden {
-      display: none;
+      display: none !important;
     }
 
-    .main-title {
-      text-align: center;
-      font-size: 42px;
-      font-weight: 800;
-      margin: 18px 0 28px;
-      letter-spacing: 0.5px;
-      text-shadow: 0 4px 12px rgba(0,0,0,0.18);
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      max-width: 460px;
+    .container {
+      width: 100%;
+      max-width: 430px;
       margin: 0 auto;
     }
 
-    .home-card, .workout-card, .bonus-card {
-      border-radius: 28px;
-      padding: 20px 14px;
-      background: rgba(255,255,255,0.14);
-      border: 1px solid rgba(255,255,255,0.18);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      box-shadow: 0 10px 28px rgba(0,0,0,0.16);
+    .home-title {
       text-align: center;
+      font-size: 52px;
+      line-height: 1;
+      font-weight: 900;
+      letter-spacing: -1.4px;
+      margin: 12px 0 26px;
+      text-shadow: 0 8px 24px rgba(0, 0, 0, 0.24);
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
     }
 
     .home-card {
-      min-height: 125px;
+      position: relative;
+      min-height: 128px;
+      border-radius: 28px;
+      padding: 18px 16px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.05));
+      border: 1px solid var(--card-border);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       display: flex;
       flex-direction: column;
       justify-content: center;
+      align-items: center;
+      text-align: center;
+      overflow: hidden;
+      transition: transform 0.18s ease, border-color 0.18s ease;
       cursor: pointer;
-      transition: transform 0.18s ease;
+    }
+
+    .home-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.06), transparent 55%);
+      pointer-events: none;
     }
 
     .home-card:active {
-      transform: scale(0.98);
+      transform: scale(0.985);
     }
 
     .home-card-title {
-      font-size: 20px;
-      font-weight: 700;
+      position: relative;
+      z-index: 1;
+      font-size: 19px;
+      font-weight: 800;
       margin-bottom: 8px;
     }
 
     .home-card-sub {
+      position: relative;
+      z-index: 1;
       font-size: 15px;
-      opacity: 0.92;
+      color: var(--muted);
+      font-weight: 500;
     }
 
-    .top-bar {
-      max-width: 460px;
-      margin: 0 auto 18px;
+    .home-card.active-card {
+      border-color: rgba(255,255,255,0.22);
+      box-shadow:
+        0 18px 40px rgba(0, 0, 0, 0.24),
+        0 0 0 1px rgba(255,255,255,0.05) inset;
+    }
+
+    .top-row {
       display: flex;
       justify-content: flex-start;
+      align-items: center;
+      margin-bottom: 10px;
     }
 
     .back-btn {
-      width: 42px;
-      height: 42px;
-      border: none;
+      width: 44px;
+      height: 44px;
       border-radius: 999px;
-      background: white;
+      border: none;
+      background: #ffffff;
       color: #9ca3af;
-      font-size: 22px;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.18);
-    }
-
-    .section-title {
-      text-align: center;
-      font-size: 34px;
+      font-size: 24px;
       font-weight: 800;
-      margin: 6px 0 22px;
-      text-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .workouts-wrap {
-      max-width: 460px;
-      margin: 0 auto;
+    .page-title {
+      text-align: center;
+      font-size: 38px;
+      line-height: 1.05;
+      font-weight: 900;
+      letter-spacing: -1px;
+      margin: 6px 0 24px;
+      text-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
     }
 
-    .three-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+    .workout-list {
+      display: flex;
+      flex-direction: column;
       gap: 14px;
     }
 
-    .workout-card {
-      min-height: 110px;
+    .workout-row,
+    .bonus-row {
+      min-height: 82px;
+      border-radius: 24px;
+      padding: 0 20px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.06));
+      border: 1px solid var(--card-border);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+    }
+
+    .workout-row:active,
+    .bonus-row:active {
+      transform: scale(0.988);
+    }
+
+    .workout-row.done,
+    .bonus-row.done {
+      border-color: rgba(255,255,255,0.24);
+      background: linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0.09));
+    }
+
+    .row-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .check-circle {
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      border: 2px solid rgba(255,255,255,0.34);
       display: flex;
       align-items: center;
       justify-content: center;
+      font-size: 16px;
+      font-weight: 900;
+      color: transparent;
+      background: rgba(255,255,255,0.04);
+      transition: all 0.22s ease;
+      flex-shrink: 0;
+    }
+
+    .done .check-circle {
+      color: white;
+      border-color: rgba(255,255,255,0.25);
+      background: rgba(34, 197, 94, 0.85);
+      transform: scale(1.05);
+      box-shadow: 0 8px 20px rgba(34, 197, 94, 0.28);
+    }
+
+    .row-title {
       font-size: 21px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: 0.2s ease;
+      font-weight: 800;
+      letter-spacing: -0.3px;
     }
 
-    .workout-card.done {
-      background: rgba(255,255,255,0.28);
-      border: 2px solid rgba(255,255,255,0.45);
+    .row-sub {
+      font-size: 14px;
+      color: var(--muted);
+      margin-top: 3px;
+      font-weight: 500;
     }
 
-    .bonus-card {
-      margin-top: 14px;
-      min-height: 90px;
+    .progress-box {
+      margin-top: 22px;
+      padding: 18px 16px 8px;
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.04));
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    .progress-label {
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      justify-content: center;
-      font-size: 21px;
+      margin-bottom: 12px;
+      font-size: 16px;
       font-weight: 700;
-      cursor: pointer;
     }
 
-    .bonus-card.done {
-      background: rgba(255,255,255,0.28);
-      border: 2px solid rgba(255,255,255,0.45);
-    }
-
-    .progress-wrap {
-      max-width: 460px;
-      margin: 18px auto 0;
-    }
-
-    .progress-bar-bg {
+    .progress-track {
       width: 100%;
-      height: 18px;
-      background: rgba(255,255,255,0.22);
+      height: 16px;
       border-radius: 999px;
       overflow: hidden;
-      box-shadow: inset 0 2px 8px rgba(0,0,0,0.12);
+      background: rgba(255,255,255,0.11);
+      box-shadow: inset 0 3px 8px rgba(0,0,0,0.16);
     }
 
-    .progress-bar-fill {
-      height: 100%;
+    .progress-fill {
       width: 0%;
+      height: 100%;
       border-radius: 999px;
-      transition: width 0.25s ease, background 0.25s ease;
-      background: #ef4444;
+      background: var(--red);
+      transition: width 0.35s ease, background 0.35s ease;
+      box-shadow: 0 0 18px rgba(255,255,255,0.12);
     }
 
-    .progress-text {
-      margin-top: 10px;
+    .bonus-message {
+      min-height: 28px;
+      padding-top: 14px;
       text-align: center;
-      font-size: 18px;
-      font-weight: 700;
+      font-size: 17px;
+      font-weight: 800;
+      color: #d1fae5;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 0.25s ease, transform 0.25s ease;
     }
 
-    .bonus-text {
-      margin-top: 14px;
-      text-align: center;
-      font-size: 18px;
-      font-weight: 700;
-      color: #fff7b2;
-      min-height: 26px;
+    .bonus-message.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .footer-space {
+      height: 10px;
+    }
+
+    @media (max-width: 390px) {
+      .home-title {
+        font-size: 46px;
+      }
+
+      .page-title {
+        font-size: 34px;
+      }
+
+      .home-card {
+        min-height: 118px;
+      }
     }
   </style>
 </head>
 <body>
+  <div id="homePage" class="app-bg">
+    <div class="container">
+      <div class="home-title">היום שלי</div>
 
-  <div id="homePage" class="page">
-    <div class="main-title">היום שלי</div>
+      <div class="cards-grid">
+        <div class="home-card active-card" onclick="openWorkouts()">
+          <div class="home-card-title">אימונים</div>
+          <div class="home-card-sub"><span id="homeCounter">0</span>/3 השבוע</div>
+        </div>
 
-    <div class="grid">
-      <div class="home-card" onclick="openWorkouts()">
-        <div class="home-card-title">אימונים</div>
-        <div class="home-card-sub"><span id="homeCounter">0</span>/3 השבוע</div>
+        <div class="home-card">
+          <div class="home-card-title">תזונה</div>
+          <div class="home-card-sub">בקרוב</div>
+        </div>
+
+        <div class="home-card">
+          <div class="home-card-title">מסחר</div>
+          <div class="home-card-sub">בקרוב</div>
+        </div>
+
+        <div class="home-card">
+          <div class="home-card-title">פתקים</div>
+          <div class="home-card-sub">בקרוב</div>
+        </div>
+
+        <div class="home-card">
+          <div class="home-card-title">משימות</div>
+          <div class="home-card-sub">בקרוב</div>
+        </div>
+
+        <div class="home-card">
+          <div class="home-card-title">יעדים</div>
+          <div class="home-card-sub">בקרוב</div>
+        </div>
+
+        <div class="home-card">
+          <div class="home-card-title">שגרה</div>
+          <div class="home-card-sub">בקרוב</div>
+        </div>
+
+        <div class="home-card">
+          <div class="home-card-title">תוספות</div>
+          <div class="home-card-sub">בקרוב</div>
+        </div>
       </div>
 
-      <div class="home-card">
-        <div class="home-card-title">תזונה</div>
-        <div class="home-card-sub">בקרוב</div>
-      </div>
-
-      <div class="home-card">
-        <div class="home-card-title">מסחר</div>
-        <div class="home-card-sub">בקרוב</div>
-      </div>
-
-      <div class="home-card">
-        <div class="home-card-title">פתקים</div>
-        <div class="home-card-sub">בקרוב</div>
-      </div>
-
-      <div class="home-card">
-        <div class="home-card-title">משימות</div>
-        <div class="home-card-sub">בקרוב</div>
-      </div>
-
-      <div class="home-card">
-        <div class="home-card-title">עוד</div>
-        <div class="home-card-sub">בקרוב</div>
-      </div>
+      <div class="footer-space"></div>
     </div>
   </div>
 
-  <div id="workoutsPage" class="page hidden">
-    <div class="top-bar">
-      <button class="back-btn" onclick="goHome()">←</button>
-    </div>
-
-    <div class="section-title">האימונים שלי</div>
-
-    <div class="workouts-wrap">
-      <div class="three-grid">
-        <div id="workout1" class="workout-card" onclick="toggleWorkout(1)">אימון 1</div>
-        <div id="workout2" class="workout-card" onclick="toggleWorkout(2)">אימון 2</div>
-        <div id="workout3" class="workout-card" onclick="toggleWorkout(3)">אימון 3</div>
+  <div id="workoutsPage" class="app-bg hidden">
+    <div class="container">
+      <div class="top-row">
+        <button class="back-btn" onclick="goHome()">←</button>
       </div>
 
-      <div id="bonusCard" class="bonus-card" onclick="toggleBonus()">אימון בונוס</div>
-    </div>
+      <div class="page-title">האימונים שלי</div>
 
-    <div class="progress-wrap">
-      <div class="progress-bar-bg">
-        <div id="progressFill" class="progress-bar-fill"></div>
+      <div class="workout-list">
+        <div id="workout1" class="workout-row" onclick="toggleWorkout(1)">
+          <div class="row-right">
+            <div class="check-circle">✓</div>
+            <div>
+              <div class="row-title">אימון 1</div>
+              <div class="row-sub">לחץ לסימון</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="workout2" class="workout-row" onclick="toggleWorkout(2)">
+          <div class="row-right">
+            <div class="check-circle">✓</div>
+            <div>
+              <div class="row-title">אימון 2</div>
+              <div class="row-sub">לחץ לסימון</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="workout3" class="workout-row" onclick="toggleWorkout(3)">
+          <div class="row-right">
+            <div class="check-circle">✓</div>
+            <div>
+              <div class="row-title">אימון 3</div>
+              <div class="row-sub">לחץ לסימון</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="bonusRow" class="bonus-row" onclick="toggleBonus()">
+          <div class="row-right">
+            <div class="check-circle">✓</div>
+            <div>
+              <div class="row-title">אימון בונוס</div>
+              <div class="row-sub">לאלופים בלבד</div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div id="progressText" class="progress-text">0/3</div>
-      <div id="bonusText" class="bonus-text"></div>
+
+      <div class="progress-box">
+        <div class="progress-label">
+          <span>התקדמות שבועית</span>
+          <span id="progressText">0/3</span>
+        </div>
+
+        <div class="progress-track">
+          <div id="progressFill" class="progress-fill"></div>
+        </div>
+
+        <div id="bonusMessage" class="bonus-message">אלוף, ביצעת אימון בונוס</div>
+      </div>
     </div>
   </div>
 
   <script>
-    const WORKOUTS_KEY = "noam_workouts_v2";
-    const BONUS_KEY = "noam_bonus_v2";
+    const WORKOUTS_KEY = "noam_workouts_v3";
+    const BONUS_KEY = "noam_bonus_v3";
 
     let workouts = JSON.parse(localStorage.getItem(WORKOUTS_KEY)) || [false, false, false];
     let bonusDone = JSON.parse(localStorage.getItem(BONUS_KEY)) || false;
@@ -270,51 +469,52 @@
     }
 
     function getProgressColor(count) {
-      if (count === 1) return "#ef4444";
-      if (count === 2) return "#facc15";
-      if (count >= 3) return "#22c55e";
-      return "#ef4444";
+      if (count <= 1) return getComputedStyle(document.documentElement).getPropertyValue("--red").trim();
+      if (count === 2) return getComputedStyle(document.documentElement).getPropertyValue("--yellow").trim();
+      return getComputedStyle(document.documentElement).getPropertyValue("--green").trim();
     }
 
     function updateUI() {
       const count = getCompletedCount();
 
-      document.getElementById("homeCounter").innerText = count;
-      document.getElementById("progressText").innerText = count + "/3";
+      document.getElementById("homeCounter").textContent = count;
+      document.getElementById("progressText").textContent = count + "/3";
 
       for (let i = 1; i <= 3; i++) {
-        const card = document.getElementById("workout" + i);
+        const row = document.getElementById("workout" + i);
         if (workouts[i - 1]) {
-          card.classList.add("done");
+          row.classList.add("done");
         } else {
-          card.classList.remove("done");
+          row.classList.remove("done");
         }
       }
 
-      const fill = document.getElementById("progressFill");
-      fill.style.width = (count / 3 * 100) + "%";
-      fill.style.background = getProgressColor(count);
+      const progressFill = document.getElementById("progressFill");
+      progressFill.style.width = Math.min((count / 3) * 100, 100) + "%";
+      progressFill.style.background = getProgressColor(count);
 
-      const bonusCard = document.getElementById("bonusCard");
-      const bonusText = document.getElementById("bonusText");
+      const bonusRow = document.getElementById("bonusRow");
+      const bonusMessage = document.getElementById("bonusMessage");
 
       if (bonusDone) {
-        bonusCard.classList.add("done");
-        bonusText.innerText = "אלוף, ביצעת אימון בונוס";
+        bonusRow.classList.add("done");
+        bonusMessage.classList.add("show");
       } else {
-        bonusCard.classList.remove("done");
-        bonusText.innerText = "";
+        bonusRow.classList.remove("done");
+        bonusMessage.classList.remove("show");
       }
     }
 
     function openWorkouts() {
       document.getElementById("homePage").classList.add("hidden");
       document.getElementById("workoutsPage").classList.remove("hidden");
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
     function goHome() {
       document.getElementById("workoutsPage").classList.add("hidden");
       document.getElementById("homePage").classList.remove("hidden");
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
     function toggleWorkout(index) {
