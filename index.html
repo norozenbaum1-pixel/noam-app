@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Noam App</title>
+
+  <style>
+    body {
+      font-family: Arial;
+      background: #f3f3f3;
+      margin: 0;
+      padding: 20px;
+      direction: rtl;
+      text-align: center;
+    }
+
+    h1 {
+      margin-top: 20px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-top: 30px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 20px;
+      padding: 20px;
+      font-size: 18px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      cursor: pointer;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .progress {
+      margin-top: 20px;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      background: black;
+      color: white;
+      font-size: 16px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="home">
+    <h1>נועם המושלם</h1>
+
+    <div class="grid">
+      <div class="card" onclick="openWorkouts()">
+        אימונים<br>
+        <span id="counter">0/3</span>
+      </div>
+    </div>
+  </div>
+
+  <div id="workouts" class="hidden">
+    <h2>אימונים</h2>
+
+    <div class="progress">
+      <span id="weekCounter">0/3</span>
+    </div>
+
+    <button onclick="addWorkout()">סיימתי אימון</button>
+    <button onclick="removeWorkout()">בטל</button>
+    <br><br>
+    <button onclick="goBack()">חזור</button>
+  </div>
+
+  <script>
+    let count = localStorage.getItem("workouts") || 0;
+    count = Number(count);
+
+    function updateUI() {
+      document.getElementById("counter").innerText = count + "/3";
+      document.getElementById("weekCounter").innerText = count + "/3";
+    }
+
+    function openWorkouts() {
+      document.getElementById("home").classList.add("hidden");
+      document.getElementById("workouts").classList.remove("hidden");
+    }
+
+    function goBack() {
+      document.getElementById("workouts").classList.add("hidden");
+      document.getElementById("home").classList.remove("hidden");
+    }
+
+    function addWorkout() {
+      if (count < 3) count++;
+      localStorage.setItem("workouts", count);
+      updateUI();
+    }
+
+    function removeWorkout() {
+      if (count > 0) count--;
+      localStorage.setItem("workouts", count);
+      updateUI();
+    }
+
+    updateUI();
+  </script>
+
+</body>
+</html>
