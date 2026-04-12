@@ -1,535 +1,201 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1, viewport-fit=cover"
-  />
-  <meta name="theme-color" content="#121826" />
-  <title>היום שלי</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>היום שלי</title>
 
-  <style>
-    :root {
-      --bg-1: #0f172a;
-      --bg-2: #182338;
-      --bg-3: #27344d;
-      --card: rgba(255, 255, 255, 0.08);
-      --card-border: rgba(255, 255, 255, 0.14);
-      --text: #f8fafc;
-      --muted: rgba(248, 250, 252, 0.72);
-      --shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
-      --red: #ef4444;
-      --yellow: #f59e0b;
-      --green: #22c55e;
-    }
+<style>
+body{
+  margin:0;
+  font-family:Arial;
+  background:#0f172a;
+  color:white;
+  direction:rtl;
+}
 
-    * {
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
+.container{
+  max-width:420px;
+  margin:auto;
+  padding:20px;
+}
 
-    html {
-      margin: 0;
-      padding: 0;
-      min-height: 100%;
-      background:
-        radial-gradient(circle at top right, rgba(96, 165, 250, 0.16), transparent 28%),
-        radial-gradient(circle at bottom left, rgba(168, 85, 247, 0.12), transparent 30%),
-        linear-gradient(160deg, var(--bg-1) 0%, var(--bg-2) 52%, var(--bg-3) 100%);
-      background-attachment: fixed;
-    }
+h1{
+  text-align:center;
+  font-size:40px;
+}
 
-    body {
-      margin: 0;
-      padding: 0;
-      min-height: 100vh;
-      min-height: 100dvh;
-      color: var(--text);
-      font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "SF Pro Display",
-        "Segoe UI",
-        Arial,
-        sans-serif;
-      background: transparent;
-    }
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
 
-    .app-bg {
-      min-height: 100vh;
-      min-height: 100dvh;
-      padding-top: calc(env(safe-area-inset-top) + 18px);
-      padding-bottom: calc(env(safe-area-inset-bottom) + 22px);
-      padding-left: 16px;
-      padding-right: 16px;
-      background:
-        radial-gradient(circle at top right, rgba(96, 165, 250, 0.16), transparent 28%),
-        radial-gradient(circle at bottom left, rgba(168, 85, 247, 0.12), transparent 30%),
-        linear-gradient(160deg, var(--bg-1) 0%, var(--bg-2) 52%, var(--bg-3) 100%);
-    }
+.card{
+  background:#1e293b;
+  padding:20px;
+  border-radius:20px;
+  text-align:center;
+}
 
-    .hidden {
-      display: none !important;
-    }
+.hidden{display:none;}
 
-    .container {
-      width: 100%;
-      max-width: 430px;
-      margin: 0 auto;
-    }
+.row{
+  background:#1e293b;
+  padding:15px;
+  border-radius:15px;
+  margin-bottom:10px;
+}
 
-    .home-title {
-      text-align: center;
-      font-size: 52px;
-      line-height: 1;
-      font-weight: 900;
-      letter-spacing: -1.4px;
-      margin: 12px 0 26px;
-      text-shadow: 0 8px 24px rgba(0, 0, 0, 0.24);
-    }
+.toggle{
+  display:flex;
+  justify-content:space-between;
+  margin:6px 0;
+}
 
-    .cards-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
+.btn{
+  padding:5px 10px;
+  border-radius:10px;
+  border:none;
+}
 
-    .home-card {
-      position: relative;
-      min-height: 128px;
-      border-radius: 28px;
-      padding: 18px 16px;
-      background:
-        linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.05));
-      border: 1px solid var(--card-border);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      overflow: hidden;
-      transition: transform 0.18s ease, border-color 0.18s ease;
-      cursor: pointer;
-    }
+.active{background:green;}
+.red{background:red;}
+.yellow{background:orange;}
 
-    .home-card::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(135deg, rgba(255,255,255,0.06), transparent 55%);
-      pointer-events: none;
-    }
-
-    .home-card:active {
-      transform: scale(0.985);
-    }
-
-    .home-card-title {
-      position: relative;
-      z-index: 1;
-      font-size: 19px;
-      font-weight: 800;
-      margin-bottom: 8px;
-    }
-
-    .home-card-sub {
-      position: relative;
-      z-index: 1;
-      font-size: 15px;
-      color: var(--muted);
-      font-weight: 500;
-    }
-
-    .home-card.active-card {
-      border-color: rgba(255,255,255,0.22);
-      box-shadow:
-        0 18px 40px rgba(0, 0, 0, 0.24),
-        0 0 0 1px rgba(255,255,255,0.05) inset;
-    }
-
-    .top-row {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      margin-bottom: 10px;
-    }
-
-    .back-btn {
-      width: 44px;
-      height: 44px;
-      border-radius: 999px;
-      border: none;
-      background: #ffffff;
-      color: #9ca3af;
-      font-size: 24px;
-      font-weight: 800;
-      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .page-title {
-      text-align: center;
-      font-size: 38px;
-      line-height: 1.05;
-      font-weight: 900;
-      letter-spacing: -1px;
-      margin: 6px 0 24px;
-      text-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
-    }
-
-    .workout-list {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .workout-row,
-    .bonus-row {
-      min-height: 82px;
-      border-radius: 24px;
-      padding: 0 20px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.06));
-      border: 1px solid var(--card-border);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      cursor: pointer;
-      transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
-    }
-
-    .workout-row:active,
-    .bonus-row:active {
-      transform: scale(0.988);
-    }
-
-    .workout-row.done,
-    .bonus-row.done {
-      border-color: rgba(255,255,255,0.24);
-      background: linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0.09));
-    }
-
-    .row-right {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .check-circle {
-      width: 30px;
-      height: 30px;
-      border-radius: 999px;
-      border: 2px solid rgba(255,255,255,0.34);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-      font-weight: 900;
-      color: transparent;
-      background: rgba(255,255,255,0.04);
-      transition: all 0.22s ease;
-      flex-shrink: 0;
-    }
-
-    .done .check-circle {
-      color: white;
-      border-color: rgba(255,255,255,0.25);
-      background: rgba(34, 197, 94, 0.85);
-      transform: scale(1.05);
-      box-shadow: 0 8px 20px rgba(34, 197, 94, 0.28);
-    }
-
-    .row-title {
-      font-size: 21px;
-      font-weight: 800;
-      letter-spacing: -0.3px;
-    }
-
-    .row-sub {
-      font-size: 14px;
-      color: var(--muted);
-      margin-top: 3px;
-      font-weight: 500;
-    }
-
-    .progress-box {
-      margin-top: 22px;
-      padding: 18px 16px 8px;
-      border-radius: 24px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.04));
-      border: 1px solid rgba(255,255,255,0.1);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-    }
-
-    .progress-label {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-      font-size: 16px;
-      font-weight: 700;
-    }
-
-    .progress-track {
-      width: 100%;
-      height: 16px;
-      border-radius: 999px;
-      overflow: hidden;
-      background: rgba(255,255,255,0.11);
-      box-shadow: inset 0 3px 8px rgba(0,0,0,0.16);
-    }
-
-    .progress-fill {
-      width: 0%;
-      height: 100%;
-      border-radius: 999px;
-      background: var(--red);
-      transition: width 0.35s ease, background 0.35s ease;
-      box-shadow: 0 0 18px rgba(255,255,255,0.12);
-    }
-
-    .bonus-message {
-      min-height: 28px;
-      padding-top: 14px;
-      text-align: center;
-      font-size: 17px;
-      font-weight: 800;
-      color: #d1fae5;
-      opacity: 0;
-      transform: translateY(6px);
-      transition: opacity 0.25s ease, transform 0.25s ease;
-    }
-
-    .bonus-message.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .footer-space {
-      height: 10px;
-    }
-
-    @media (max-width: 390px) {
-      .home-title {
-        font-size: 46px;
-      }
-
-      .page-title {
-        font-size: 34px;
-      }
-
-      .home-card {
-        min-height: 118px;
-      }
-    }
-  </style>
+textarea{
+  width:100%;
+  border-radius:10px;
+  margin-top:5px;
+}
+</style>
 </head>
+
 <body>
-  <div id="homePage" class="app-bg">
-    <div class="container">
-      <div class="home-title">היום שלי</div>
 
-      <div class="cards-grid">
-        <div class="home-card active-card" onclick="openWorkouts()">
-          <div class="home-card-title">אימונים</div>
-          <div class="home-card-sub"><span id="homeCounter">0</span>/3 השבוע</div>
-        </div>
+<div id="home">
+  <div class="container">
+    <h1>היום שלי</h1>
 
-        <div class="home-card">
-          <div class="home-card-title">תזונה</div>
-          <div class="home-card-sub">בקרוב</div>
-        </div>
-
-        <div class="home-card">
-          <div class="home-card-title">מסחר</div>
-          <div class="home-card-sub">בקרוב</div>
-        </div>
-
-        <div class="home-card">
-          <div class="home-card-title">פתקים</div>
-          <div class="home-card-sub">בקרוב</div>
-        </div>
-
-        <div class="home-card">
-          <div class="home-card-title">משימות</div>
-          <div class="home-card-sub">בקרוב</div>
-        </div>
-
-        <div class="home-card">
-          <div class="home-card-title">יעדים</div>
-          <div class="home-card-sub">בקרוב</div>
-        </div>
-
-        <div class="home-card">
-          <div class="home-card-title">שגרה</div>
-          <div class="home-card-sub">בקרוב</div>
-        </div>
-
-        <div class="home-card">
-          <div class="home-card-title">תוספות</div>
-          <div class="home-card-sub">בקרוב</div>
-        </div>
-      </div>
-
-      <div class="footer-space"></div>
+    <div class="grid">
+      <div class="card" onclick="openTrading()">מסחר</div>
+      <div class="card">בקרוב</div>
+      <div class="card">בקרוב</div>
+      <div class="card">בקרוב</div>
+      <div class="card">בקרוב</div>
+      <div class="card">בקרוב</div>
     </div>
   </div>
+</div>
 
-  <div id="workoutsPage" class="app-bg hidden">
-    <div class="container">
-      <div class="top-row">
-        <button class="back-btn" onclick="goHome()">←</button>
-      </div>
+<div id="trading" class="hidden">
+  <div class="container">
 
-      <div class="page-title">האימונים שלי</div>
+    <button onclick="back()">חזור</button>
+    <h1>המסחר שלי</h1>
 
-      <div class="workout-list">
-        <div id="workout1" class="workout-row" onclick="toggleWorkout(1)">
-          <div class="row-right">
-            <div class="check-circle">✓</div>
-            <div>
-              <div class="row-title">אימון 1</div>
-              <div class="row-sub">לחץ לסימון</div>
-            </div>
-          </div>
-        </div>
+    <div id="days"></div>
 
-        <div id="workout2" class="workout-row" onclick="toggleWorkout(2)">
-          <div class="row-right">
-            <div class="check-circle">✓</div>
-            <div>
-              <div class="row-title">אימון 2</div>
-              <div class="row-sub">לחץ לסימון</div>
-            </div>
-          </div>
-        </div>
-
-        <div id="workout3" class="workout-row" onclick="toggleWorkout(3)">
-          <div class="row-right">
-            <div class="check-circle">✓</div>
-            <div>
-              <div class="row-title">אימון 3</div>
-              <div class="row-sub">לחץ לסימון</div>
-            </div>
-          </div>
-        </div>
-
-        <div id="bonusRow" class="bonus-row" onclick="toggleBonus()">
-          <div class="row-right">
-            <div class="check-circle">✓</div>
-            <div>
-              <div class="row-title">אימון בונוס</div>
-              <div class="row-sub">לאלופים בלבד</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="progress-box">
-        <div class="progress-label">
-          <span>התקדמות שבועית</span>
-          <span id="progressText">0/3</span>
-        </div>
-
-        <div class="progress-track">
-          <div id="progressFill" class="progress-fill"></div>
-        </div>
-
-        <div id="bonusMessage" class="bonus-message">אלוף, ביצעת אימון בונוס</div>
-      </div>
+    <div class="card">
+      <h3>סיכום שבועי</h3>
+      <div id="summary"></div>
     </div>
+
   </div>
+</div>
 
-  <script>
-    const WORKOUTS_KEY = "noam_workouts_v3";
-    const BONUS_KEY = "noam_bonus_v3";
+<script>
 
-    let workouts = JSON.parse(localStorage.getItem(WORKOUTS_KEY)) || [false, false, false];
-    let bonusDone = JSON.parse(localStorage.getItem(BONUS_KEY)) || false;
+const days = ["שני","שלישי","רביעי","חמישי","שישי"];
+let data = JSON.parse(localStorage.getItem("trade")) || {};
 
-    function saveData() {
-      localStorage.setItem(WORKOUTS_KEY, JSON.stringify(workouts));
-      localStorage.setItem(BONUS_KEY, JSON.stringify(bonusDone));
-    }
+function openTrading(){
+  document.getElementById("home").classList.add("hidden");
+  document.getElementById("trading").classList.remove("hidden");
+  render();
+}
 
-    function getCompletedCount() {
-      return workouts.filter(Boolean).length;
-    }
+function back(){
+  document.getElementById("trading").classList.add("hidden");
+  document.getElementById("home").classList.remove("hidden");
+}
 
-    function getProgressColor(count) {
-      if (count <= 1) return getComputedStyle(document.documentElement).getPropertyValue("--red").trim();
-      if (count === 2) return getComputedStyle(document.documentElement).getPropertyValue("--yellow").trim();
-      return getComputedStyle(document.documentElement).getPropertyValue("--green").trim();
-    }
+function toggle(day,key){
+  data[day] = data[day] || {};
+  data[day][key] = !data[day][key];
+  save();
+}
 
-    function updateUI() {
-      const count = getCompletedCount();
+function setColor(day,color){
+  data[day] = data[day] || {};
+  data[day].color = color;
+  save();
+}
 
-      document.getElementById("homeCounter").textContent = count;
-      document.getElementById("progressText").textContent = count + "/3";
+function setNote(day,val){
+  data[day] = data[day] || {};
+  data[day].note = val;
+  save();
+}
 
-      for (let i = 1; i <= 3; i++) {
-        const row = document.getElementById("workout" + i);
-        if (workouts[i - 1]) {
-          row.classList.add("done");
-        } else {
-          row.classList.remove("done");
-        }
-      }
+function save(){
+  localStorage.setItem("trade",JSON.stringify(data));
+  render();
+}
 
-      const progressFill = document.getElementById("progressFill");
-      progressFill.style.width = Math.min((count / 3) * 100, 100) + "%";
-      progressFill.style.background = getProgressColor(count);
+function render(){
+  let html="";
+  let traded=0,setup=0,green=0,happy=0;
 
-      const bonusRow = document.getElementById("bonusRow");
-      const bonusMessage = document.getElementById("bonusMessage");
+  days.forEach(day=>{
+    let d=data[day]||{};
 
-      if (bonusDone) {
-        bonusRow.classList.add("done");
-        bonusMessage.classList.add("show");
-      } else {
-        bonusRow.classList.remove("done");
-        bonusMessage.classList.remove("show");
-      }
-    }
+    if(d.trade) traded++;
+    if(d.setup) setup++;
+    if(d.color==="green") green++;
+    if(d.happy) happy++;
 
-    function openWorkouts() {
-      document.getElementById("homePage").classList.add("hidden");
-      document.getElementById("workoutsPage").classList.remove("hidden");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
+    html+=`
+    <div class="row">
+      <b>${day}</b>
 
-    function goHome() {
-      document.getElementById("workoutsPage").classList.add("hidden");
-      document.getElementById("homePage").classList.remove("hidden");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
+      <div class="toggle">
+        סחרתי היום
+        <button onclick="toggle('${day}','trade')" class="btn ${d.trade?'active':''}">✓</button>
+      </div>
 
-    function toggleWorkout(index) {
-      workouts[index - 1] = !workouts[index - 1];
-      saveData();
-      updateUI();
-    }
+      <div class="toggle">
+        פעלתי לפי סטאפ
+        <button onclick="toggle('${day}','setup')" class="btn ${d.setup?'active':''}">✓</button>
+      </div>
 
-    function toggleBonus() {
-      bonusDone = !bonusDone;
-      saveData();
-      updateUI();
-    }
+      <div class="toggle">
+        יום
+        <button onclick="setColor('${day}','green')" class="btn ${d.color==='green'?'active':''}">ירוק</button>
+        <button onclick="setColor('${day}','red')" class="btn ${d.color==='red'?'red':''}">אדום</button>
+      </div>
 
-    updateUI();
-  </script>
+      <div class="toggle">
+        מרוצה
+        <button onclick="toggle('${day}','happy')" class="btn ${d.happy?'active':''}">✓</button>
+      </div>
+
+      <textarea placeholder="הערה..." oninput="setNote('${day}',this.value)">${d.note||""}</textarea>
+    </div>
+    `;
+  });
+
+  document.getElementById("days").innerHTML = html;
+
+  document.getElementById("summary").innerHTML = `
+  סחרת: ${traded}<br>
+  סטאפ: ${setup}<br>
+  ירוקים: ${green}<br>
+  מרוצה: ${happy}
+  `;
+}
+
+</script>
+
 </body>
 </html>
