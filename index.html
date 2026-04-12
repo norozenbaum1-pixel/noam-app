@@ -1,138 +1,132 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { ArrowRight, Dumbbell, CheckCircle2, RotateCcw, History } from 'lucide-react';
+<!DOCTYPE html>
+<html lang="he">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Noam App</title>
 
-const WEEKLY_TARGET = 3;
-const STORAGE_KEY = 'noam-workouts-app-v2';
-
-function getWeekStart(date = new Date()) {
-  const d = new Date(date);
-  const day = d.getDay();
-  d.setHours(0, 0, 0, 0);
-  d.setDate(d.getDate() - day);
-  return d;
+<style>
+body {
+  margin: 0;
+  font-family: 'Arial';
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  direction: rtl;
+  text-align: center;
 }
 
-function formatWeekKey(date = new Date()) {
-  return getWeekStart(date).toISOString().slice(0, 10);
+h1 {
+  margin-top: 30px;
+  font-size: 28px;
 }
 
-function formatWeekLabel(weekKey) {
-  const start = new Date(weekKey);
-  const end = new Date(start);
-  end.setDate(start.getDate() + 6);
-
-  const format = (d) =>
-    d.toLocaleDateString('he-IL', {
-      day: 'numeric',
-      month: 'numeric',
-    });
-
-  return `${format(start)} - ${format(end)}`;
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  padding: 20px;
+  margin-top: 20px;
 }
 
-export default function PersonalWebAppNoam() {
-  const [screen, setScreen] = useState('home');
-  const [history, setHistory] = useState({});
+.card {
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 25px;
+  font-size: 18px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  transition: 0.2s;
+}
 
-  useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) setHistory(JSON.parse(saved));
-  }, []);
+.card:hover {
+  transform: scale(1.05);
+}
 
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
-  }, [history]);
+.counter {
+  margin-top: 10px;
+  font-size: 16px;
+  opacity: 0.8;
+}
 
-  const currentWeekKey = formatWeekKey();
-  const currentCount = history[currentWeekKey] || 0;
-  const progress = Math.min((currentCount / WEEKLY_TARGET) * 100, 100);
+.hidden {
+  display: none;
+}
 
-  const addWorkout = () => {
-    setHistory((prev) => ({
-      ...prev,
-      [currentWeekKey]: (prev[currentWeekKey] || 0) + 1,
-    }));
-  };
+button {
+  margin-top: 15px;
+  padding: 12px 20px;
+  border-radius: 15px;
+  border: none;
+  background: white;
+  color: black;
+  font-size: 16px;
+}
+</style>
+</head>
 
-  const removeWorkout = () => {
-    setHistory((prev) => ({
-      ...prev,
-      [currentWeekKey]: Math.max(0, (prev[currentWeekKey] || 0) - 1),
-    }));
-  };
+<body>
 
-  const sortedHistory = useMemo(() => {
-    return Object.entries(history).sort((a, b) => (a[0] < b[0] ? 1 : -1));
-  }, [history]);
+<div id="home">
+  <h1>נועם המושלם</h1>
 
-  if (screen === 'workouts') {
-    return (
-      <div className="min-h-screen bg-slate-50 p-4" dir="rtl">
-        <div className="max-w-xl mx-auto space-y-6">
-          <Button variant="secondary" className="rounded-2xl" onClick={() => setScreen('home')}>
-            חזור
-          </Button>
-
-          <div className="text-2xl font-bold">אימונים</div>
-
-          <div className="rounded-3xl bg-white p-4 border">
-            <div className="flex justify-between">
-              <div>{formatWeekLabel(currentWeekKey)}</div>
-              <div className="font-bold">{currentCount}/{WEEKLY_TARGET}</div>
-            </div>
-
-            <div className="h-3 bg-slate-200 rounded-full mt-3">
-              <div className="h-full bg-black rounded-full" style={{ width: `${progress}%` }} />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <Button className="rounded-2xl h-12" onClick={addWorkout}>
-              <CheckCircle2 className="ml-2" /> סיימתי אימון
-            </Button>
-            <Button variant="secondary" className="rounded-2xl h-12" onClick={removeWorkout}>
-              <RotateCcw className="ml-2" /> בטל
-            </Button>
-          </div>
-
-          <div className="space-y-2">
-            <div className="font-semibold flex items-center gap-2"><History /> היסטוריה</div>
-            {sortedHistory.map(([week, count]) => (
-              <div key={week} className="flex justify-between border rounded-2xl p-3">
-                <div>{formatWeekLabel(week)}</div>
-                <div>{count}/{WEEKLY_TARGET}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-slate-50 p-4" dir="rtl">
-      <div className="max-w-xl mx-auto space-y-6">
-        <div className="text-center mt-6">
-          <h1 className="text-3xl font-bold">נועם המושלם</h1>
-        </div>
-
-        <div className="grid grid-cols-2 gap-4 mt-6">
-          <Card
-            className="rounded-3xl p-4 shadow-sm cursor-pointer hover:scale-105 transition"
-            onClick={() => setScreen('workouts')}
-          >
-            <CardContent className="flex flex-col items-center gap-2">
-              <Dumbbell className="h-8 w-8" />
-              <div className="font-semibold">אימונים</div>
-              <Badge>{currentCount}/{WEEKLY_TARGET}</Badge>
-              <ArrowRight />
-            </CardContent>
-          </Card>
-        </div>
-      </div>
+  <div class="grid">
+    <div class="card" onclick="openWorkouts()">
+      אימונים
+      <div class="counter" id="counter">0/3</div>
     </div>
-  );
+
+    <div class="card">תזונה</div>
+    <div class="card">מסחר</div>
+    <div class="card">פתקים</div>
+    <div class="card">יעדים</div>
+    <div class="card">עוד</div>
+  </div>
+</div>
+
+<div id="workouts" class="hidden">
+  <h1>אימונים</h1>
+
+  <div class="counter" id="weekCounter">0/3</div>
+
+  <button onclick="addWorkout()">סיימתי אימון</button>
+  <button onclick="removeWorkout()">בטל</button>
+  <br>
+  <button onclick="goBack()">חזור</button>
+</div>
+
+<script>
+let count = localStorage.getItem("workouts") || 0;
+count = Number(count);
+
+function updateUI() {
+  document.getElementById("counter").innerText = count + "/3";
+  document.getElementById("weekCounter").innerText = count + "/3";
 }
+
+function openWorkouts() {
+  document.getElementById("home").classList.add("hidden");
+  document.getElementById("workouts").classList.remove("hidden");
+}
+
+function goBack() {
+  document.getElementById("workouts").classList.add("hidden");
+  document.getElementById("home").classList.remove("hidden");
+}
+
+function addWorkout() {
+  if (count < 3) count++;
+  localStorage.setItem("workouts", count);
+  updateUI();
+}
+
+function removeWorkout() {
+  if (count > 0) count--;
+  localStorage.setItem("workouts", count);
+  updateUI();
+}
+
+updateUI();
+</script>
+
+</body>
+</html>
