@@ -104,7 +104,7 @@
       align-items: center;
       text-align: center;
       overflow: hidden;
-      transition: transform 0.18s ease, border-color 0.18s ease;
+      transition: transform 0.12s ease, border-color 0.18s ease, box-shadow 0.18s ease;
       cursor: pointer;
     }
 
@@ -126,10 +126,14 @@
     .mini-btn:active,
     .week-day-card:active,
     .month-card:active,
-    .year-day-card:active,
+    .year-day-cell:active,
     .task-main:active,
-    .details-btn:active {
+    .details-btn:active,
+    .back-btn:active,
+    .delete-btn:active,
+    .add-btn:active {
       transform: scale(0.985);
+      filter: brightness(1.06);
     }
 
     .home-card-title {
@@ -170,6 +174,7 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
+      transition: transform 0.12s ease, filter 0.12s ease;
     }
 
     .page-title {
@@ -207,7 +212,6 @@
     }
 
     .months-grid,
-    .year-days-grid,
     .summary-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -224,10 +228,11 @@
     .month-card,
     .input-box,
     .small-summary-box,
-    .year-day-card,
     .year-selected-box,
     .task-item,
-    .entry-box {
+    .entry-box,
+    .calendar-grid-box,
+    .calendar-modal-card {
       border-radius: 24px;
       background: linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.06));
       border: 1px solid var(--card-border);
@@ -244,7 +249,7 @@
       align-items: center;
       justify-content: space-between;
       cursor: pointer;
-      transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+      transition: transform 0.12s ease, border-color 0.18s ease, background 0.18s ease;
     }
 
     .workout-row.done,
@@ -290,8 +295,7 @@
     .task-title,
     .week-day-title,
     .month-title,
-    .trade-day-title,
-    .year-day-big {
+    .trade-day-title {
       font-size: 21px;
       font-weight: 800;
       letter-spacing: -0.3px;
@@ -307,7 +311,6 @@
     .task-sub,
     .week-day-sub,
     .month-sub,
-    .year-day-sub,
     .task-detail {
       font-size: 14px;
       color: var(--muted);
@@ -320,7 +323,9 @@
     .task-box,
     .input-box,
     .small-summary-box,
-    .year-selected-box {
+    .year-selected-box,
+    .calendar-grid-box,
+    .calendar-modal-card {
       padding: 18px 16px;
     }
 
@@ -585,8 +590,7 @@
       justify-content: center;
     }
 
-    .month-card.active,
-    .year-day-card.active {
+    .month-card.active {
       border-color: rgba(255,255,255,0.24);
       box-shadow: 0 18px 40px rgba(0,0,0,0.24);
     }
@@ -596,55 +600,120 @@
       text-align: center;
     }
 
-    .year-days-grid {
-      margin-top: 14px;
+    .calendar-grid-box {
+      margin-top: 18px;
     }
 
-    .year-day-card {
-      min-height: 110px;
-      padding: 14px 10px;
+    .calendar-weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .weekday-head {
       text-align: center;
-      cursor: pointer;
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 800;
+      padding: 4px 0;
     }
 
-    .year-day-big {
-      font-size: 28px;
-      font-weight: 900;
-      margin-bottom: 6px;
+    .year-days-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+      margin-top: 8px;
     }
 
-    .calendar-badge,
-    .source-badge,
-    .count-badge,
-    .time-badge {
-      display: inline-flex;
+    .year-day-cell,
+    .year-day-empty {
+      min-height: 58px;
+      border-radius: 14px;
+    }
+
+    .year-day-empty {
+      background: transparent;
+      border: 1px solid transparent;
+    }
+
+    .year-day-cell {
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.05);
+      display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
+      cursor: pointer;
+      transition: transform 0.12s ease, background 0.18s ease, border-color 0.18s ease;
+      padding: 6px 4px;
+    }
+
+    .year-day-cell.active {
+      border-color: rgba(255,255,255,0.26);
+      background: rgba(255,255,255,0.11);
+    }
+
+    .year-day-num {
+      font-size: 18px;
+      font-weight: 900;
+      line-height: 1;
+      margin-bottom: 2px;
+    }
+
+    .year-day-hebrew {
+      font-size: 10px;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.15;
+    }
+
+    .year-day-dot {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      width: 8px;
+      height: 8px;
       border-radius: 999px;
-      padding: 5px 10px;
-      font-size: 12px;
-      font-weight: 800;
-      color: white;
-      white-space: nowrap;
+      background: var(--green);
+      box-shadow: 0 0 10px rgba(34,197,94,0.45);
     }
 
-    .source-badge {
-      background: rgba(59,130,246,0.22);
-      border: 1px solid rgba(59,130,246,0.22);
+    .calendar-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 6, 23, 0.68);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      padding: 18px;
     }
 
-    .calendar-badge {
-      background: rgba(255,255,255,0.12);
+    .calendar-modal-overlay.show {
+      display: flex;
+      animation: fadeIn 0.18s ease;
     }
 
-    .count-badge {
-      background: rgba(34,197,94,0.18);
-      border: 1px solid rgba(34,197,94,0.20);
+    .calendar-modal-card {
+      width: 100%;
+      max-width: 430px;
+      max-height: 82vh;
+      overflow: auto;
+      animation: popIn 0.18s ease;
     }
 
-    .time-badge {
-      background: rgba(245,158,11,0.18);
-      border: 1px solid rgba(245,158,11,0.20);
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.97) translateY(8px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
     }
 
     .entry-box {
@@ -746,6 +815,7 @@
       font-size: 16px;
       font-weight: 900;
       cursor: pointer;
+      transition: transform 0.12s ease, filter 0.12s ease;
     }
 
     .inline-row {
@@ -772,12 +842,49 @@
       line-height: 1.5;
     }
 
+    .calendar-badge,
+    .source-badge,
+    .count-badge,
+    .time-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      padding: 5px 10px;
+      font-size: 12px;
+      font-weight: 800;
+      color: white;
+      white-space: nowrap;
+    }
+
+    .source-badge {
+      background: rgba(59,130,246,0.22);
+      border: 1px solid rgba(59,130,246,0.22);
+    }
+
+    .calendar-badge {
+      background: rgba(255,255,255,0.12);
+    }
+
+    .count-badge {
+      background: rgba(34,197,94,0.18);
+      border: 1px solid rgba(34,197,94,0.20);
+    }
+
+    .time-badge {
+      background: rgba(245,158,11,0.18);
+      border: 1px solid rgba(245,158,11,0.20);
+    }
+
     @media (max-width: 390px) {
       .home-title { font-size: 46px; }
       .page-title { font-size: 34px; }
       .home-card { min-height: 118px; }
       .trade-label { font-size: 15px; }
-      .summary-grid, .months-grid, .year-days-grid { grid-template-columns: 1fr 1fr; }
+      .summary-grid, .months-grid { grid-template-columns: 1fr 1fr; }
+      .year-day-cell, .year-day-empty { min-height: 52px; }
+      .year-day-num { font-size: 16px; }
+      .year-day-hebrew { font-size: 9px; }
     }
   </style>
 </head>
@@ -936,17 +1043,26 @@
       </div>
 
       <div class="page-title">היומן השנתי</div>
-      <div class="section-subtitle">בחר חודש, אחר כך יום ספציפי, והוסף לו פריטים עם שעה, כותרת ופירוט.</div>
+      <div class="section-subtitle">בחר חודש, ואז תאריך. החלון של אותו תאריך ייפתח מולך.</div>
 
       <div id="monthsGrid" class="months-grid"></div>
 
-      <div class="summary-box" style="margin-top:18px;">
+      <div class="calendar-grid-box">
         <div id="selectedMonthTitle" class="summary-title" style="font-size:24px; margin-bottom:6px;"></div>
         <div id="selectedMonthSub" class="section-subtitle" style="margin:0 0 14px;"></div>
+
+        <div class="calendar-weekdays">
+          <div class="weekday-head">א</div>
+          <div class="weekday-head">ב</div>
+          <div class="weekday-head">ג</div>
+          <div class="weekday-head">ד</div>
+          <div class="weekday-head">ה</div>
+          <div class="weekday-head">ו</div>
+          <div class="weekday-head">ש</div>
+        </div>
+
         <div id="yearDaysGrid" class="year-days-grid"></div>
       </div>
-
-      <div id="selectedYearDayBox" class="year-selected-box hidden" style="margin-top:18px;"></div>
     </div>
   </div>
 
@@ -1000,15 +1116,24 @@
     </div>
   </div>
 
+  <div id="calendarModal" class="calendar-modal-overlay">
+    <div class="calendar-modal-card">
+      <div class="top-row" style="margin-bottom:14px;">
+        <button class="back-btn" onclick="closeCalendarModal()">←</button>
+      </div>
+      <div id="calendarModalContent"></div>
+    </div>
+  </div>
+
   <script>
-    const WORKOUTS_KEY = "noam_workouts_v8_fix";
-    const BONUS_KEY = "noam_bonus_v8_fix";
-    const TRADE_KEY = "noam_trade_v8_fix";
-    const YEARLY_KEY = "noam_yearly_v8_fix";
-    const WEEKLY_CAL_KEY = "noam_weekly_calendar_v8_fix";
-    const MANUAL_TASKS_KEY = "noam_manual_tasks_v8_fix";
-    const TODAY_DONE_KEY = "noam_today_done_v8_fix";
-    const TASK_OPEN_KEY = "noam_task_open_v8_fix";
+    const WORKOUTS_KEY = "noam_workouts_v9_fix";
+    const BONUS_KEY = "noam_bonus_v9_fix";
+    const TRADE_KEY = "noam_trade_v9_fix";
+    const YEARLY_KEY = "noam_yearly_v9_fix";
+    const WEEKLY_CAL_KEY = "noam_weekly_calendar_v9_fix";
+    const MANUAL_TASKS_KEY = "noam_manual_tasks_v9_fix";
+    const TODAY_DONE_KEY = "noam_today_done_v9_fix";
+    const TASK_OPEN_KEY = "noam_task_open_v9_fix";
 
     const TRADE_DAYS = ["שני", "שלישי", "רביעי", "חמישי", "שישי"];
     const WEEK_DAYS = ["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת"];
@@ -1111,9 +1236,7 @@
     }
 
     function activateTimeInput(input) {
-      if (input.type !== "time") {
-        input.type = "time";
-      }
+      if (input.type !== "time") input.type = "time";
     }
 
     function deactivateTimeInput(input) {
@@ -1139,7 +1262,10 @@
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
-    function goHome() { openOnly("homePage"); }
+    function goHome() { 
+      closeCalendarModal();
+      openOnly("homePage"); 
+    }
     function openWorkouts() { openOnly("workoutsPage"); }
     function openTrading() { renderTrading(); openOnly("tradingPage"); }
     function openYearlyCalendar() { renderYearlyCalendar(); openOnly("yearlyCalendarPage"); }
@@ -1313,9 +1439,7 @@
     }
 
     function ensureYearDate(dateKey) {
-      if (!yearlyData[dateKey]) {
-        yearlyData[dateKey] = [];
-      }
+      if (!yearlyData[dateKey]) yearlyData[dateKey] = [];
     }
 
     function selectYearMonth(monthIndex) {
@@ -1327,7 +1451,8 @@
 
     function selectYearDate(dateKey) {
       selectedYearDateKey = dateKey;
-      renderYearlyCalendar();
+      openCalendarModal(dateKey);
+      renderYearlyCalendarGridOnly();
     }
 
     function addYearlyEntry(dateKey) {
@@ -1339,7 +1464,8 @@
         detail: ""
       });
       saveJson(YEARLY_KEY, yearlyData);
-      renderSelectedYearDay();
+      renderCalendarModal(dateKey);
+      renderYearlyCalendarGridOnly();
       updateHomeCounters();
       renderTodayTasks();
     }
@@ -1348,7 +1474,7 @@
       ensureYearDate(dateKey);
       yearlyData[dateKey] = yearlyData[dateKey].filter(item => item.id !== entryId);
       saveJson(YEARLY_KEY, yearlyData);
-      renderSelectedYearDay();
+      renderCalendarModal(dateKey);
       renderYearlyCalendarGridOnly();
       updateHomeCounters();
       renderTodayTasks();
@@ -1374,9 +1500,14 @@
       document.getElementById("selectedMonthSub").textContent = "בחר יום בחודש והוסף לו פריטים";
 
       const daysInMonth = new Date(selectedYear, selectedMonthIndex + 1, 0).getDate();
+      const firstDay = new Date(selectedYear, selectedMonthIndex, 1).getDay(); // 0=Sun
       const daysGrid = document.getElementById("yearDaysGrid");
 
       let html = "";
+      for (let i = 0; i < firstDay; i++) {
+        html += `<div class="year-day-empty"></div>`;
+      }
+
       for (let day = 1; day <= daysInMonth; day++) {
         const currentDate = new Date(selectedYear, selectedMonthIndex, day);
         const dateKey = getDateKey(currentDate);
@@ -1384,12 +1515,10 @@
         const count = yearlyData[dateKey].filter(item => (item.title || "").trim()).length;
 
         html += `
-          <div class="year-day-card ${selectedYearDateKey === dateKey ? 'active' : ''}" onclick="selectYearDate('${dateKey}')">
-            <div class="year-day-big">${day}</div>
-            <div class="year-day-sub">${escapeHtml(formatHebrewDate(currentDate))}</div>
-            <div style="margin-top:8px;">
-              <span class="count-badge">${count} פריטים</span>
-            </div>
+          <div class="year-day-cell ${selectedYearDateKey === dateKey ? 'active' : ''}" onclick="selectYearDate('${dateKey}')">
+            ${count > 0 ? `<div class="year-day-dot"></div>` : ``}
+            <div class="year-day-num">${day}</div>
+            <div class="year-day-hebrew">${escapeHtml(formatHebrewDate(currentDate))}</div>
           </div>
         `;
       }
@@ -1397,47 +1526,49 @@
       daysGrid.innerHTML = html;
     }
 
-    function renderSelectedYearDay() {
-      const box = document.getElementById("selectedYearDayBox");
-      if (!selectedYearDateKey) {
-        box.classList.add("hidden");
-        box.innerHTML = "";
-        return;
-      }
+    function openCalendarModal(dateKey) {
+      renderCalendarModal(dateKey);
+      document.getElementById("calendarModal").classList.add("show");
+    }
 
-      ensureYearDate(selectedYearDateKey);
-      const selectedDate = parseDateKey(selectedYearDateKey);
+    function closeCalendarModal() {
+      document.getElementById("calendarModal").classList.remove("show");
+    }
 
-      box.classList.remove("hidden");
-      box.innerHTML = `
+    function renderCalendarModal(dateKey) {
+      ensureYearDate(dateKey);
+      const selectedDate = parseDateKey(dateKey);
+      const modalContent = document.getElementById("calendarModalContent");
+
+      modalContent.innerHTML = `
         <div class="summary-title" style="font-size:24px; margin-bottom:6px;">${escapeHtml(formatFullDisplayDate(selectedDate))}</div>
         <div class="section-subtitle" style="margin:0 0 14px;">${escapeHtml(formatHebrewDate(selectedDate))}</div>
 
-        ${yearlyData[selectedYearDateKey].map(item => `
+        ${yearlyData[dateKey].map(item => `
           <div class="entry-box">
             <div class="entry-head">
               <div class="entry-head-title">${escapeHtml(item.title || "פריט חדש")}</div>
-              <button class="delete-btn" onclick="removeYearlyEntry('${selectedYearDateKey}','${item.id}')">×</button>
+              <button class="delete-btn" onclick="removeYearlyEntry('${dateKey}','${item.id}')">×</button>
             </div>
 
             <input
               class="task-title-input"
               placeholder="כותרת"
               value="${escapeAttr(item.title || "")}"
-              oninput="setYearlyEntryField('${selectedYearDateKey}','${item.id}','title', this.value)"
+              oninput="setYearlyEntryField('${dateKey}','${item.id}','title', this.value)"
             />
 
-            ${createTimeInputHtml(item.time || "", `oninput="setYearlyEntryField('${selectedYearDateKey}','${item.id}','time', this.value)"`)}
+            ${createTimeInputHtml(item.time || "", `oninput="setYearlyEntryField('${dateKey}','${item.id}','time', this.value)"`)}
 
             <textarea
               class="task-input"
               placeholder="פירוט אופציונלי..."
-              oninput="setYearlyEntryField('${selectedYearDateKey}','${item.id}','detail', this.value)"
+              oninput="setYearlyEntryField('${dateKey}','${item.id}','detail', this.value)"
             >${escapeHtml(item.detail || "")}</textarea>
           </div>
         `).join("")}
 
-        <button class="add-btn" onclick="addYearlyEntry('${selectedYearDateKey}')">הוסף פריט ליום הזה</button>
+        <button class="add-btn" onclick="addYearlyEntry('${dateKey}')">הוסף פריט ליום הזה</button>
       `;
     }
 
@@ -1445,7 +1576,6 @@
       const wrap = document.getElementById("monthsGrid");
 
       wrap.innerHTML = MONTHS.map((month, index) => {
-        const monthDate = new Date(selectedYear, index, 1);
         const hebrewMonths = getHebrewMonthsInGregorianMonth(selectedYear, index);
         return `
           <div class="month-card ${index === selectedMonthIndex ? 'active' : ''}" onclick="selectYearMonth(${index})">
@@ -1456,7 +1586,6 @@
       }).join("");
 
       renderYearlyCalendarGridOnly();
-      renderSelectedYearDay();
     }
 
     function ensureWeekDay(day) {
@@ -1760,6 +1889,10 @@
       if (weeklyCountEl) weeklyCountEl.textContent = getWeeklyEventsCount();
       if (todayCountEl) todayCountEl.textContent = getTodayTasksCombined().length;
     }
+
+    document.getElementById("calendarModal").addEventListener("click", (e) => {
+      if (e.target.id === "calendarModal") closeCalendarModal();
+    });
 
     if (!selectedYearDateKey) {
       selectedYearDateKey = getDateKey(new Date(selectedYear, selectedMonthIndex, 1));
