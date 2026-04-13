@@ -507,7 +507,6 @@
 
     .trade-note,
     .week-input,
-    .calendar-note-input,
     .task-input,
     .task-title-input,
     .task-time-input {
@@ -525,7 +524,6 @@
 
     .trade-note,
     .week-input,
-    .calendar-note-input,
     .task-input {
       resize: vertical;
       min-height: 82px;
@@ -538,9 +536,9 @@
 
     .trade-note::placeholder,
     .week-input::placeholder,
-    .calendar-note-input::placeholder,
     .task-input::placeholder,
-    .task-title-input::placeholder {
+    .task-title-input::placeholder,
+    .task-time-input::placeholder {
       color: rgba(255,255,255,0.55);
     }
 
@@ -985,7 +983,7 @@
         <div class="section-title" style="font-size:22px; margin-bottom:12px;">הוסף משימה אישית</div>
         <div class="inline-row">
           <input id="manualTaskTitle" class="task-title-input" placeholder="כותרת" />
-          <input id="manualTaskTime" class="task-time-input" type="time" />
+          <input id="manualTaskTime" class="task-time-input" type="text" placeholder="הוסף שעה" onfocus="activateTimeInput(this)" onblur="deactivateTimeInput(this)" />
           <textarea id="manualTaskDetail" class="task-input" placeholder="פירוט אופציונלי..."></textarea>
           <button class="add-btn" onclick="addManualTask()">הוסף</button>
         </div>
@@ -1003,14 +1001,14 @@
   </div>
 
   <script>
-    const WORKOUTS_KEY = "noam_workouts_v7_keep_design";
-    const BONUS_KEY = "noam_bonus_v7_keep_design";
-    const TRADE_KEY = "noam_trade_v7_keep_design";
-    const YEARLY_KEY = "noam_yearly_v7_keep_design";
-    const WEEKLY_CAL_KEY = "noam_weekly_calendar_v7_keep_design";
-    const MANUAL_TASKS_KEY = "noam_manual_tasks_v7_keep_design";
-    const TODAY_DONE_KEY = "noam_today_done_v7_keep_design";
-    const TASK_OPEN_KEY = "noam_task_open_v7_keep_design";
+    const WORKOUTS_KEY = "noam_workouts_v8_fix";
+    const BONUS_KEY = "noam_bonus_v8_fix";
+    const TRADE_KEY = "noam_trade_v8_fix";
+    const YEARLY_KEY = "noam_yearly_v8_fix";
+    const WEEKLY_CAL_KEY = "noam_weekly_calendar_v8_fix";
+    const MANUAL_TASKS_KEY = "noam_manual_tasks_v8_fix";
+    const TODAY_DONE_KEY = "noam_today_done_v8_fix";
+    const TASK_OPEN_KEY = "noam_task_open_v8_fix";
 
     const TRADE_DAYS = ["שני", "שלישי", "רביעי", "חמישי", "שישי"];
     const WEEK_DAYS = ["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת"];
@@ -1099,6 +1097,37 @@
         day: "numeric",
         month: "long"
       }).format(date);
+    }
+
+    function getHebrewMonthsInGregorianMonth(year, monthIndex) {
+      const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
+      const hebrewMonths = [];
+      for (let day = 1; day <= daysInMonth; day++) {
+        const date = new Date(year, monthIndex, day);
+        const hm = new Intl.DateTimeFormat("he-IL-u-ca-hebrew", { month: "long" }).format(date);
+        if (!hebrewMonths.includes(hm)) hebrewMonths.push(hm);
+      }
+      return hebrewMonths.join(" / ");
+    }
+
+    function activateTimeInput(input) {
+      if (input.type !== "time") {
+        input.type = "time";
+      }
+    }
+
+    function deactivateTimeInput(input) {
+      if (!input.value) {
+        input.type = "text";
+        input.placeholder = "הוסף שעה";
+      }
+    }
+
+    function createTimeInputHtml(value, extraAttrs = "") {
+      if (value) {
+        return `<input class="task-time-input" type="time" value="${escapeAttr(value)}" ${extraAttrs} />`;
+      }
+      return `<input class="task-time-input" type="text" value="" placeholder="הוסף שעה" onfocus="activateTimeInput(this)" onblur="deactivateTimeInput(this)" ${extraAttrs} />`;
     }
 
     function openOnly(pageId) {
@@ -1338,8 +1367,10 @@
 
     function renderYearlyCalendarGridOnly() {
       const selectedMonthDate = new Date(selectedYear, selectedMonthIndex, 1);
+      const hebrewMonthRange = getHebrewMonthsInGregorianMonth(selectedYear, selectedMonthIndex);
+
       document.getElementById("selectedMonthTitle").textContent =
-        `${formatGregorianMonthYear(selectedMonthDate)} • ${formatHebrewMonthYear(selectedMonthDate)}`;
+        `${formatGregorianMonthYear(selectedMonthDate)} • ${hebrewMonthRange}`;
       document.getElementById("selectedMonthSub").textContent = "בחר יום בחודש והוסף לו פריטים";
 
       const daysInMonth = new Date(selectedYear, selectedMonthIndex + 1, 0).getDate();
@@ -1396,12 +1427,7 @@
               oninput="setYearlyEntryField('${selectedYearDateKey}','${item.id}','title', this.value)"
             />
 
-            <input
-              class="task-time-input"
-              type="time"
-              value="${escapeAttr(item.time || "")}"
-              oninput="setYearlyEntryField('${selectedYearDateKey}','${item.id}','time', this.value)"
-            />
+            ${createTimeInputHtml(item.time || "", `oninput="setYearlyEntryField('${selectedYearDateKey}','${item.id}','time', this.value)"`)}
 
             <textarea
               class="task-input"
@@ -1420,10 +1446,11 @@
 
       wrap.innerHTML = MONTHS.map((month, index) => {
         const monthDate = new Date(selectedYear, index, 1);
+        const hebrewMonths = getHebrewMonthsInGregorianMonth(selectedYear, index);
         return `
           <div class="month-card ${index === selectedMonthIndex ? 'active' : ''}" onclick="selectYearMonth(${index})">
             <div class="month-title">${month}</div>
-            <div class="month-sub">${escapeHtml(formatHebrewMonthYear(monthDate))}</div>
+            <div class="month-sub">${escapeHtml(hebrewMonths)}</div>
           </div>
         `;
       }).join("");
@@ -1517,13 +1544,7 @@
                       oninput="setWeeklyItemField('${day}','${item.id}','title', this.value)"
                     />
 
-                    <input
-                      class="task-time-input"
-                      type="time"
-                      value="${escapeAttr(item.time || "")}"
-                      onclick="event.stopPropagation()"
-                      oninput="setWeeklyItemField('${day}','${item.id}','time', this.value)"
-                    />
+                    ${createTimeInputHtml(item.time || "", `onclick="event.stopPropagation()" oninput="setWeeklyItemField('${day}','${item.id}','time', this.value)"`)}
 
                     <textarea
                       class="task-input"
@@ -1550,7 +1571,7 @@
       const detailInput = document.getElementById("manualTaskDetail");
 
       const title = titleInput.value.trim();
-      const time = timeInput.value;
+      const time = timeInput.type === "time" ? timeInput.value : "";
       const detail = detailInput.value.trim();
 
       if (!title) {
@@ -1572,6 +1593,8 @@
 
       titleInput.value = "";
       timeInput.value = "";
+      timeInput.type = "text";
+      timeInput.placeholder = "הוסף שעה";
       detailInput.value = "";
 
       saveJson(MANUAL_TASKS_KEY, manualTasks);
@@ -1689,7 +1712,7 @@
                 <div class="task-check" onclick="event.stopPropagation(); toggleTodayTaskDone('${task.id}')">${done ? '✓' : ''}</div>
                 <div class="task-text">
                   <div class="task-topline">
-                    ${task.time ? `<span class="time-badge">${escapeHtml(task.time)}</span>` : ``}
+                    ${task.time ? `<span class="time-badge">${escapeHtml(task.time)}</span>` : `<span class="time-badge">ללא שעה</span>`}
                     <div class="task-title">${escapeHtml(task.title)}</div>
                   </div>
                   <div class="task-meta">
