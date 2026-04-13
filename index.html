@@ -104,8 +104,9 @@
       align-items: center;
       text-align: center;
       overflow: hidden;
-      transition: transform 0.12s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+      transition: transform 0.12s ease, border-color 0.18s ease, box-shadow 0.18s ease, filter 0.12s ease;
       cursor: pointer;
+      user-select: none;
     }
 
     .home-card::before {
@@ -132,8 +133,8 @@
     .back-btn:active,
     .delete-btn:active,
     .add-btn:active {
-      transform: scale(0.985);
-      filter: brightness(1.06);
+      transform: scale(0.97);
+      filter: brightness(1.12);
     }
 
     .home-card-title {
@@ -175,6 +176,7 @@
       justify-content: center;
       cursor: pointer;
       transition: transform 0.12s ease, filter 0.12s ease;
+      user-select: none;
     }
 
     .page-title {
@@ -249,7 +251,8 @@
       align-items: center;
       justify-content: space-between;
       cursor: pointer;
-      transition: transform 0.12s ease, border-color 0.18s ease, background 0.18s ease;
+      transition: transform 0.12s ease, border-color 0.18s ease, background 0.18s ease, filter 0.12s ease;
+      user-select: none;
     }
 
     .workout-row.done,
@@ -281,6 +284,7 @@
       transition: all 0.22s ease;
       flex-shrink: 0;
       cursor: pointer;
+      user-select: none;
     }
 
     .done .check-circle,
@@ -392,6 +396,7 @@
       align-items: center;
       justify-content: space-between;
       cursor: pointer;
+      user-select: none;
     }
 
     .trade-day-arrow,
@@ -464,6 +469,7 @@
       color: white;
       background: rgba(255,255,255,0.12);
       transition: 0.2s ease;
+      user-select: none;
     }
 
     .mini-btn {
@@ -584,10 +590,11 @@
       min-height: 118px;
       padding: 16px 14px;
       cursor: pointer;
-      transition: transform 0.18s ease;
+      transition: transform 0.18s ease, filter 0.12s ease;
       display: flex;
       flex-direction: column;
       justify-content: center;
+      user-select: none;
     }
 
     .month-card.active {
@@ -646,8 +653,9 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      transition: transform 0.12s ease, background 0.18s ease, border-color 0.18s ease;
+      transition: transform 0.12s ease, background 0.18s ease, border-color 0.18s ease, filter 0.12s ease;
       padding: 6px 4px;
+      user-select: none;
     }
 
     .year-day-cell.active {
@@ -753,6 +761,7 @@
       align-items: flex-start;
       gap: 12px;
       cursor: pointer;
+      user-select: none;
     }
 
     .task-left {
@@ -816,6 +825,7 @@
       font-weight: 900;
       cursor: pointer;
       transition: transform 0.12s ease, filter 0.12s ease;
+      user-select: none;
     }
 
     .inline-row {
@@ -1126,14 +1136,14 @@
   </div>
 
   <script>
-    const WORKOUTS_KEY = "noam_workouts_v9_fix";
-    const BONUS_KEY = "noam_bonus_v9_fix";
-    const TRADE_KEY = "noam_trade_v9_fix";
-    const YEARLY_KEY = "noam_yearly_v9_fix";
-    const WEEKLY_CAL_KEY = "noam_weekly_calendar_v9_fix";
-    const MANUAL_TASKS_KEY = "noam_manual_tasks_v9_fix";
-    const TODAY_DONE_KEY = "noam_today_done_v9_fix";
-    const TASK_OPEN_KEY = "noam_task_open_v9_fix";
+    const WORKOUTS_KEY = "noam_workouts_v10_fix";
+    const BONUS_KEY = "noam_bonus_v10_fix";
+    const TRADE_KEY = "noam_trade_v10_fix";
+    const YEARLY_KEY = "noam_yearly_v10_fix";
+    const WEEKLY_CAL_KEY = "noam_weekly_calendar_v10_fix";
+    const MANUAL_TASKS_KEY = "noam_manual_tasks_v10_fix";
+    const TODAY_DONE_KEY = "noam_today_done_v10_fix";
+    const TASK_OPEN_KEY = "noam_task_open_v10_fix";
 
     const TRADE_DAYS = ["שני", "שלישי", "רביעי", "חמישי", "שישי"];
     const WEEK_DAYS = ["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת"];
@@ -1144,7 +1154,7 @@
     let tradeData = JSON.parse(localStorage.getItem(TRADE_KEY)) || {};
     let yearlyData = JSON.parse(localStorage.getItem(YEARLY_KEY)) || {};
     let weeklyCalendarData = JSON.parse(localStorage.getItem(WEEKLY_CAL_KEY)) || {};
-    let manualTasks = JSON.parse(localStorage.getItem(MANUAL_TASKS_KEY)) || [];
+    let manualTasks = JSON.parse(localStorage.getItem(MANUAL_TASKS_KEY)) || {};
     let todayDoneMap = JSON.parse(localStorage.getItem(TODAY_DONE_KEY)) || {};
     let taskOpenMap = JSON.parse(localStorage.getItem(TASK_OPEN_KEY)) || {};
 
@@ -1189,6 +1199,14 @@
 
     function getTodayDateKey() {
       return getDateKey(new Date());
+    }
+
+    function getTaskDoneKey(taskId) {
+      return `${getTodayDateKey()}__${taskId}`;
+    }
+
+    function ensureManualTasksForDate(dateKey) {
+      if (!manualTasks[dateKey]) manualTasks[dateKey] = [];
     }
 
     function getTodayWeekdayName() {
@@ -1500,7 +1518,7 @@
       document.getElementById("selectedMonthSub").textContent = "בחר יום בחודש והוסף לו פריטים";
 
       const daysInMonth = new Date(selectedYear, selectedMonthIndex + 1, 0).getDate();
-      const firstDay = new Date(selectedYear, selectedMonthIndex, 1).getDay(); // 0=Sun
+      const firstDay = new Date(selectedYear, selectedMonthIndex, 1).getDay();
       const daysGrid = document.getElementById("yearDaysGrid");
 
       let html = "";
@@ -1702,18 +1720,21 @@
       const title = titleInput.value.trim();
       const time = timeInput.type === "time" ? timeInput.value : "";
       const detail = detailInput.value.trim();
+      const todayKey = getTodayDateKey();
 
       if (!title) {
         alert("צריך כותרת למשימה.");
         return;
       }
 
-      if (manualTasks.length >= 10) {
+      ensureManualTasksForDate(todayKey);
+
+      if (manualTasks[todayKey].length >= 10) {
         alert("אפשר להוסיף עד 10 משימות ידניות להיום.");
         return;
       }
 
-      manualTasks.push({
+      manualTasks[todayKey].push({
         id: "manual-" + Date.now() + "-" + Math.random().toString(36).slice(2, 7),
         title,
         time,
@@ -1732,7 +1753,10 @@
     }
 
     function deleteManualTask(id) {
-      manualTasks = manualTasks.filter(task => task.id !== id);
+      const todayKey = getTodayDateKey();
+      ensureManualTasksForDate(todayKey);
+
+      manualTasks[todayKey] = manualTasks[todayKey].filter(task => task.id !== id);
       saveJson(MANUAL_TASKS_KEY, manualTasks);
       renderTodayTasks();
       updateHomeCounters();
@@ -1758,7 +1782,7 @@
       return (weeklyCalendarData[todayName]?.items || [])
         .filter(item => (item.title || "").trim())
         .map(item => ({
-          id: "weekly-" + todayName + "-" + item.id,
+          id: "weekly-" + getTodayDateKey() + "-" + todayName + "-" + item.id,
           source: "weekly",
           title: item.title,
           time: item.time || "",
@@ -1767,8 +1791,11 @@
     }
 
     function getManualTasksForToday() {
-      return manualTasks.map(item => ({
-        id: "manual-wrap-" + item.id,
+      const todayKey = getTodayDateKey();
+      ensureManualTasksForDate(todayKey);
+
+      return manualTasks[todayKey].map(item => ({
+        id: "manual-wrap-" + todayKey + "-" + item.id,
         manualId: item.id,
         source: "manual",
         title: item.title,
@@ -1790,7 +1817,8 @@
     }
 
     function toggleTodayTaskDone(taskId) {
-      todayDoneMap[taskId] = !todayDoneMap[taskId];
+      const doneKey = getTaskDoneKey(taskId);
+      todayDoneMap[doneKey] = !todayDoneMap[doneKey];
       saveJson(TODAY_DONE_KEY, todayDoneMap);
       renderTodayTasks();
     }
@@ -1820,7 +1848,7 @@
       }
 
       wrap.innerHTML = tasks.map(task => {
-        const done = !!todayDoneMap[task.id];
+        const done = !!todayDoneMap[getTaskDoneKey(task.id)];
         const open = !!taskOpenMap[task.id];
         const isManual = task.source === "manual";
 
