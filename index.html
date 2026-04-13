@@ -20,6 +20,8 @@
       --green: #22c55e;
       --red: #ef4444;
       --yellow: #f59e0b;
+      --blue: #3b82f6;
+      --purple: #8b5cf6;
       --white: #ffffff;
     }
 
@@ -116,7 +118,17 @@
       pointer-events: none;
     }
 
-    .home-card:active {
+    .home-card:active,
+    .workout-row:active,
+    .bonus-row:active,
+    .trade-day-header:active,
+    .trade-toggle-btn:active,
+    .trade-color-btn:active,
+    .calendar-day-card:active,
+    .task-check:active,
+    .mini-btn:active,
+    .week-day-card:active,
+    .month-card:active {
       transform: scale(0.985);
     }
 
@@ -134,6 +146,7 @@
       font-size: 15px;
       color: var(--muted);
       font-weight: 500;
+      text-align: center;
     }
 
     .top-row {
@@ -169,18 +182,47 @@
       text-shadow: 0 8px 24px rgba(0,0,0,0.22);
     }
 
+    .section-title {
+      font-size: 24px;
+      font-weight: 900;
+      margin: 0 0 14px;
+      text-align: center;
+    }
+
+    .section-subtitle {
+      font-size: 14px;
+      color: var(--muted);
+      text-align: center;
+      margin: -4px 0 16px;
+    }
+
     .workout-list,
-    .trading-list {
+    .trading-list,
+    .calendar-list,
+    .tasks-list,
+    .week-days-list,
+    .months-grid {
       display: flex;
       flex-direction: column;
       gap: 14px;
+    }
+
+    .months-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
     }
 
     .workout-row,
     .bonus-row,
     .progress-box,
     .trade-day-card,
-    .summary-box {
+    .summary-box,
+    .calendar-day-card,
+    .task-box,
+    .week-day-card,
+    .month-card,
+    .input-box,
+    .small-summary-box {
       border-radius: 24px;
       background: linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.06));
       border: 1px solid var(--card-border);
@@ -200,16 +242,9 @@
       transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
     }
 
-    .workout-row:active,
-    .bonus-row:active,
-    .trade-day-header:active,
-    .trade-toggle-btn:active,
-    .trade-color-btn:active {
-      transform: scale(0.988);
-    }
-
     .workout-row.done,
-    .bonus-row.done {
+    .bonus-row.done,
+    .task-item.done {
       border-color: rgba(255,255,255,0.24);
       background: linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0.09));
     }
@@ -220,7 +255,8 @@
       gap: 14px;
     }
 
-    .check-circle {
+    .check-circle,
+    .task-check {
       width: 30px;
       height: 30px;
       border-radius: 999px;
@@ -234,31 +270,49 @@
       background: rgba(255,255,255,0.04);
       transition: all 0.22s ease;
       flex-shrink: 0;
+      cursor: pointer;
     }
 
-    .done .check-circle {
+    .done .check-circle,
+    .task-item.done .task-check {
       color: white;
       border-color: rgba(255,255,255,0.25);
       background: rgba(34,197,94,0.9);
       box-shadow: 0 8px 20px rgba(34,197,94,0.28);
     }
 
-    .row-title {
+    .row-title,
+    .task-title,
+    .calendar-title,
+    .week-day-title,
+    .month-title {
       font-size: 21px;
       font-weight: 800;
       letter-spacing: -0.3px;
     }
 
-    .row-sub {
+    .row-sub,
+    .task-sub,
+    .calendar-sub,
+    .week-day-sub,
+    .month-sub {
       font-size: 14px;
       color: var(--muted);
       margin-top: 3px;
       font-weight: 500;
     }
 
+    .progress-box,
+    .summary-box,
+    .task-box,
+    .input-box,
+    .small-summary-box {
+      padding: 18px 16px;
+    }
+
     .progress-box {
       margin-top: 22px;
-      padding: 18px 16px 8px;
+      padding-bottom: 8px;
     }
 
     .progress-label {
@@ -305,12 +359,16 @@
       transform: translateY(0);
     }
 
-    .trade-day-card {
+    .trade-day-card,
+    .week-day-card,
+    .calendar-day-card {
       overflow: hidden;
       transition: 0.25s ease;
     }
 
-    .trade-day-header {
+    .trade-day-header,
+    .week-day-header,
+    .calendar-day-header {
       min-height: 74px;
       padding: 0 18px;
       display: flex;
@@ -319,37 +377,51 @@
       cursor: pointer;
     }
 
-    .trade-day-title {
+    .trade-day-title,
+    .week-day-title,
+    .calendar-title {
       font-size: 24px;
       font-weight: 900;
     }
 
-    .trade-day-arrow {
+    .trade-day-arrow,
+    .week-day-arrow,
+    .calendar-day-arrow {
       font-size: 22px;
       color: var(--muted);
       transition: transform 0.22s ease;
     }
 
-    .trade-day-card.open .trade-day-arrow {
+    .trade-day-card.open .trade-day-arrow,
+    .week-day-card.open .week-day-arrow,
+    .calendar-day-card.open .calendar-day-arrow {
       transform: rotate(180deg);
     }
 
-    .trade-day-body {
+    .trade-day-body,
+    .week-day-body,
+    .calendar-day-body {
       max-height: 0;
       overflow: hidden;
       transition: max-height 0.32s ease;
       border-top: 1px solid rgba(255,255,255,0.08);
     }
 
-    .trade-day-card.open .trade-day-body {
-      max-height: 700px;
+    .trade-day-card.open .trade-day-body,
+    .week-day-card.open .week-day-body,
+    .calendar-day-card.open .calendar-day-body {
+      max-height: 800px;
     }
 
-    .trade-day-inner {
+    .trade-day-inner,
+    .week-day-inner,
+    .calendar-day-inner {
       padding: 14px 16px 16px;
     }
 
-    .trade-item {
+    .trade-item,
+    .week-task-row,
+    .calendar-note-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -358,11 +430,15 @@
       border-bottom: 1px solid rgba(255,255,255,0.08);
     }
 
-    .trade-item:last-of-type {
+    .trade-item:last-of-type,
+    .week-task-row:last-of-type,
+    .calendar-note-row:last-of-type {
       border-bottom: none;
     }
 
-    .trade-label {
+    .trade-label,
+    .week-task-label,
+    .calendar-note-label {
       font-size: 16px;
       font-weight: 700;
     }
@@ -375,7 +451,8 @@
     }
 
     .trade-toggle-btn,
-    .trade-color-btn {
+    .trade-color-btn,
+    .mini-btn {
       border: none;
       min-width: 54px;
       height: 36px;
@@ -388,12 +465,20 @@
       transition: 0.2s ease;
     }
 
-    .trade-toggle-btn.active-yes {
+    .mini-btn {
+      min-width: unset;
+      padding: 0 14px;
+      background: rgba(59,130,246,0.88);
+    }
+
+    .trade-toggle-btn.active-yes,
+    .mini-btn.active-yes {
       background: rgba(34,197,94,0.92);
       box-shadow: 0 8px 20px rgba(34,197,94,0.25);
     }
 
-    .trade-toggle-btn.active-no {
+    .trade-toggle-btn.active-no,
+    .mini-btn.active-no {
       background: rgba(239,68,68,0.92);
       box-shadow: 0 8px 20px rgba(239,68,68,0.25);
     }
@@ -408,7 +493,10 @@
       box-shadow: 0 8px 20px rgba(239,68,68,0.25);
     }
 
-    .trade-note {
+    .trade-note,
+    .week-input,
+    .calendar-note-input,
+    .task-input {
       width: 100%;
       margin-top: 14px;
       border: 1px solid rgba(255,255,255,0.12);
@@ -423,13 +511,11 @@
       font-family: inherit;
     }
 
-    .trade-note::placeholder {
+    .trade-note::placeholder,
+    .week-input::placeholder,
+    .calendar-note-input::placeholder,
+    .task-input::placeholder {
       color: rgba(255,255,255,0.55);
-    }
-
-    .summary-box {
-      margin-top: 22px;
-      padding: 18px 16px;
     }
 
     .summary-title {
@@ -465,11 +551,163 @@
       font-weight: 600;
     }
 
+    .month-card {
+      min-height: 118px;
+      padding: 16px 14px;
+      cursor: pointer;
+      transition: transform 0.18s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .month-card.active {
+      border-color: rgba(255,255,255,0.24);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.24);
+    }
+
+    .month-title {
+      text-align: center;
+      margin-bottom: 6px;
+    }
+
+    .month-sub {
+      text-align: center;
+    }
+
+    .calendar-day-card,
+    .week-day-card {
+      padding: 0;
+    }
+
+    .calendar-badge,
+    .source-badge,
+    .count-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      padding: 5px 10px;
+      font-size: 12px;
+      font-weight: 800;
+      background: rgba(255,255,255,0.12);
+      color: white;
+      white-space: nowrap;
+    }
+
+    .source-badge {
+      background: rgba(59,130,246,0.22);
+      border: 1px solid rgba(59,130,246,0.22);
+    }
+
+    .count-badge {
+      background: rgba(34,197,94,0.18);
+      border: 1px solid rgba(34,197,94,0.20);
+    }
+
+    .task-item {
+      min-height: 78px;
+      border-radius: 22px;
+      padding: 14px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.10);
+      transition: 0.2s ease;
+    }
+
+    .task-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .task-text {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .task-title {
+      font-size: 18px;
+      word-break: break-word;
+    }
+
+    .task-item.done .task-title {
+      text-decoration: line-through;
+      opacity: 0.72;
+    }
+
+    .task-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .delete-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      border: none;
+      background: rgba(239,68,68,0.18);
+      color: #fecaca;
+      font-size: 16px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .inline-row {
+      display: flex;
+      gap: 10px;
+      align-items: stretch;
+    }
+
+    .inline-row .task-input {
+      margin-top: 0;
+      min-height: 54px;
+      resize: none;
+      flex: 1;
+    }
+
+    .add-btn {
+      min-width: 90px;
+      border: none;
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(59,130,246,0.95), rgba(37,99,235,0.92));
+      color: white;
+      font-size: 16px;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 10px 22px rgba(37,99,235,0.25);
+    }
+
+    .small-summary-box {
+      margin-top: 18px;
+      text-align: center;
+    }
+
+    .small-summary-title {
+      font-size: 18px;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+
+    .small-summary-text {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
     @media (max-width: 390px) {
       .home-title { font-size: 46px; }
       .page-title { font-size: 34px; }
       .home-card { min-height: 118px; }
-      .trade-label { font-size: 15px; }
+      .trade-label, .week-task-label, .calendar-note-label { font-size: 15px; }
+      .summary-grid, .months-grid { grid-template-columns: 1fr 1fr; }
     }
   </style>
 </head>
@@ -489,19 +727,19 @@
           <div class="home-card-sub"><span id="tradeDaysCount">0</span>/5 סחרתי</div>
         </div>
 
-        <div class="home-card">
-          <div class="home-card-title">תזונה</div>
-          <div class="home-card-sub">בקרוב</div>
+        <div class="home-card" onclick="openYearlyCalendar()">
+          <div class="home-card-title">יומן שנתי</div>
+          <div class="home-card-sub"><span id="yearlyNotesCount">0</span> חודשי מיקוד</div>
         </div>
 
-        <div class="home-card">
-          <div class="home-card-title">פתקים</div>
-          <div class="home-card-sub">בקרוב</div>
+        <div class="home-card" onclick="openWeeklyCalendar()">
+          <div class="home-card-title">יומן שבועי</div>
+          <div class="home-card-sub"><span id="weeklyEventsCount">0</span> פריטים ביומן</div>
         </div>
 
-        <div class="home-card">
-          <div class="home-card-title">משימות</div>
-          <div class="home-card-sub">בקרוב</div>
+        <div class="home-card" onclick="openTodayTasks()">
+          <div class="home-card-title">המשימות להיום</div>
+          <div class="home-card-sub"><span id="todayTasksCount">0</span> משימות היום</div>
         </div>
 
         <div class="home-card">
@@ -510,12 +748,12 @@
         </div>
 
         <div class="home-card">
-          <div class="home-card-title">שגרה</div>
+          <div class="home-card-title">תזונה</div>
           <div class="home-card-sub">בקרוב</div>
         </div>
 
         <div class="home-card">
-          <div class="home-card-title">תוספות</div>
+          <div class="home-card-title">פתקים</div>
           <div class="home-card-sub">בקרוב</div>
         </div>
       </div>
@@ -621,19 +859,119 @@
     </div>
   </div>
 
+  <div id="yearlyCalendarPage" class="app-bg hidden">
+    <div class="container">
+      <div class="top-row">
+        <button class="back-btn" onclick="goHomeFromYearlyCalendar()">←</button>
+      </div>
+
+      <div class="page-title">היומן השנתי</div>
+      <div class="section-subtitle">בחר חודש, כתוב מיקוד שנתי, יעד או תזכורת חשובה</div>
+
+      <div id="monthsGrid" class="months-grid"></div>
+
+      <div class="small-summary-box">
+        <div class="small-summary-title">למה זה טוב</div>
+        <div class="small-summary-text">
+          כאן אתה שומר כיוון רחב לכל חודש — תקופות עמוסות, יעדים מרכזיים, חגים, חופשות, והשקה של מטרות.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="weeklyCalendarPage" class="app-bg hidden">
+    <div class="container">
+      <div class="top-row">
+        <button class="back-btn" onclick="goHomeFromWeeklyCalendar()">←</button>
+      </div>
+
+      <div class="page-title">היומן השבועי</div>
+      <div class="section-subtitle">כל יום נפתח בלחיצה. אפשר לכתוב אירועים ומשימות שיופיעו גם במשימות להיום.</div>
+
+      <div id="weeklyDaysWrap" class="week-days-list"></div>
+
+      <div class="small-summary-box">
+        <div class="small-summary-title">יתרון פרודוקטיבי</div>
+        <div class="small-summary-text">
+          כל פריט שאתה מוסיף כאן עם סימון "למשימות היום" יופיע אוטומטית במסך המשימות, עם תווית "נוסף מהיומן".
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="todayTasksPage" class="app-bg hidden">
+    <div class="container">
+      <div class="top-row">
+        <button class="back-btn" onclick="goHomeFromTodayTasks()">←</button>
+      </div>
+
+      <div class="page-title">המשימות להיום</div>
+      <div class="section-subtitle">כולל משימות שנוספו ידנית וגם פריטים שמגיעים מהיומן השבועי.</div>
+
+      <div class="input-box">
+        <div class="section-title" style="font-size:22px; margin-bottom:12px;">הוסף משימה אישית</div>
+        <div class="inline-row">
+          <textarea id="manualTaskInput" class="task-input" placeholder="כתוב משימה להיום... אפשר עד 10 משימות ידניות."></textarea>
+          <button class="add-btn" onclick="addManualTask()">הוסף</button>
+        </div>
+      </div>
+
+      <div class="small-summary-box">
+        <div class="small-summary-title">היום יש לך <span id="todayTasksSummaryCount">0</span> משימות</div>
+        <div class="small-summary-text">
+          המשימות מהיומן מסומנות כדי שתדע מה הגיע מתכנון שבועי ומה הוספת ידנית.
+        </div>
+      </div>
+
+      <div id="todayTasksList" class="tasks-list"></div>
+    </div>
+  </div>
+
   <script>
-    const WORKOUTS_KEY = "noam_workouts_v5";
-    const BONUS_KEY = "noam_bonus_v5";
-    const TRADE_KEY = "noam_trade_v2";
+    const WORKOUTS_KEY = "noam_workouts_v6";
+    const BONUS_KEY = "noam_bonus_v6";
+    const TRADE_KEY = "noam_trade_v3";
+    const YEARLY_KEY = "noam_yearly_v1";
+    const WEEKLY_CAL_KEY = "noam_weekly_calendar_v1";
+    const MANUAL_TASKS_KEY = "noam_manual_tasks_v1";
+
     const TRADE_DAYS = ["שני", "שלישי", "רביעי", "חמישי", "שישי"];
+    const WEEK_DAYS = ["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת"];
+    const MONTHS = ["ינואר","פברואר","מרץ","אפריל","מאי","יוני","יולי","אוגוסט","ספטמבר","אוקטובר","נובמבר","דצמבר"];
+    const TODAY_DAY_NAME = new Date().toLocaleDateString("he-IL", { weekday: "long" }).replace("יום ", "");
 
     let workouts = JSON.parse(localStorage.getItem(WORKOUTS_KEY)) || [false, false, false];
     let bonusDone = JSON.parse(localStorage.getItem(BONUS_KEY)) || false;
     let tradeData = JSON.parse(localStorage.getItem(TRADE_KEY)) || {};
+    let yearlyData = JSON.parse(localStorage.getItem(YEARLY_KEY)) || {};
+    let weeklyCalendarData = JSON.parse(localStorage.getItem(WEEKLY_CAL_KEY)) || {};
+    let manualTasks = JSON.parse(localStorage.getItem(MANUAL_TASKS_KEY)) || [];
 
     function getCssVar(name) {
       return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
     }
+
+    function escapeHtml(text) {
+      return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+    }
+
+    function normalizeDayName(name) {
+      const map = {
+        "יום ראשון": "ראשון",
+        "יום שני": "שני",
+        "יום שלישי": "שלישי",
+        "יום רביעי": "רביעי",
+        "יום חמישי": "חמישי",
+        "יום שישי": "שישי",
+        "יום שבת": "שבת",
+      };
+      return map[name] || name;
+    }
+
+    const TODAY_NORMALIZED = normalizeDayName(TODAY_DAY_NAME);
 
     function saveWorkoutData() {
       localStorage.setItem(WORKOUTS_KEY, JSON.stringify(workouts));
@@ -642,6 +980,18 @@
 
     function saveTradeData() {
       localStorage.setItem(TRADE_KEY, JSON.stringify(tradeData));
+    }
+
+    function saveYearlyData() {
+      localStorage.setItem(YEARLY_KEY, JSON.stringify(yearlyData));
+    }
+
+    function saveWeeklyCalendarData() {
+      localStorage.setItem(WEEKLY_CAL_KEY, JSON.stringify(weeklyCalendarData));
+    }
+
+    function saveManualTasks() {
+      localStorage.setItem(MANUAL_TASKS_KEY, JSON.stringify(manualTasks));
     }
 
     function getCompletedWorkoutCount() {
@@ -656,17 +1006,13 @@
 
     function updateWorkoutUI() {
       const count = getCompletedWorkoutCount();
-
       document.getElementById("homeCounter").textContent = count;
       document.getElementById("progressText").textContent = count + "/3";
 
       for (let i = 1; i <= 3; i++) {
         const row = document.getElementById("workout" + i);
-        if (workouts[i - 1]) {
-          row.classList.add("done");
-        } else {
-          row.classList.remove("done");
-        }
+        if (workouts[i - 1]) row.classList.add("done");
+        else row.classList.remove("done");
       }
 
       const progressFill = document.getElementById("progressFill");
@@ -685,18 +1031,41 @@
       }
     }
 
-    function openWorkouts() {
-      document.getElementById("homePage").classList.add("hidden");
-      document.getElementById("tradingPage").classList.add("hidden");
-      document.getElementById("workoutsPage").classList.remove("hidden");
+    function openOnly(pageId) {
+      ["homePage","workoutsPage","tradingPage","yearlyCalendarPage","weeklyCalendarPage","todayTasksPage"].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.add("hidden");
+      });
+      document.getElementById(pageId).classList.remove("hidden");
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
-    function goHomeFromWorkouts() {
-      document.getElementById("workoutsPage").classList.add("hidden");
-      document.getElementById("homePage").classList.remove("hidden");
-      window.scrollTo({ top: 0, behavior: "smooth" });
+    function openWorkouts() { openOnly("workoutsPage"); }
+    function goHomeFromWorkouts() { openOnly("homePage"); }
+
+    function openTrading() {
+      renderTrading();
+      openOnly("tradingPage");
     }
+    function goHomeFromTrading() { openOnly("homePage"); }
+
+    function openYearlyCalendar() {
+      renderYearlyCalendar();
+      openOnly("yearlyCalendarPage");
+    }
+    function goHomeFromYearlyCalendar() { openOnly("homePage"); }
+
+    function openWeeklyCalendar() {
+      renderWeeklyCalendar();
+      openOnly("weeklyCalendarPage");
+    }
+    function goHomeFromWeeklyCalendar() { openOnly("homePage"); }
+
+    function openTodayTasks() {
+      renderTodayTasks();
+      openOnly("todayTasksPage");
+    }
+    function goHomeFromTodayTasks() { openOnly("homePage"); }
 
     function toggleWorkout(index) {
       workouts[index - 1] = !workouts[index - 1];
@@ -744,11 +1113,7 @@
     }
 
     function getTradeSummary() {
-      let traded = 0;
-      let setup = 0;
-      let green = 0;
-      let happy = 0;
-
+      let traded = 0, setup = 0, green = 0, happy = 0;
       TRADE_DAYS.forEach(day => {
         ensureTradeDay(day);
         const d = tradeData[day];
@@ -757,7 +1122,6 @@
         if (d.color === "green") green++;
         if (d.happy === "yes") happy++;
       });
-
       return { traded, setup, green, happy };
     }
 
@@ -832,29 +1196,290 @@
       document.getElementById("tradeDaysCount").textContent = summary.traded;
     }
 
-    function openTrading() {
-      document.getElementById("homePage").classList.add("hidden");
-      document.getElementById("workoutsPage").classList.add("hidden");
-      document.getElementById("tradingPage").classList.remove("hidden");
-      renderTrading();
-      window.scrollTo({ top: 0, behavior: "smooth" });
+    function ensureMonth(month) {
+      if (!yearlyData[month]) {
+        yearlyData[month] = { note: "", open: false };
+      }
     }
 
-    function goHomeFromTrading() {
-      document.getElementById("tradingPage").classList.add("hidden");
-      document.getElementById("homePage").classList.remove("hidden");
-      window.scrollTo({ top: 0, behavior: "smooth" });
+    function toggleMonth(month) {
+      ensureMonth(month);
+      yearlyData[month].open = !yearlyData[month].open;
+      saveYearlyData();
+      renderYearlyCalendar();
     }
 
-    function escapeHtml(text) {
-      return String(text)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;");
+    function setMonthNote(month, value) {
+      ensureMonth(month);
+      yearlyData[month].note = value;
+      saveYearlyData();
+      updateHomeCounters();
+    }
+
+    function renderYearlyCalendar() {
+      const wrap = document.getElementById("monthsGrid");
+      let html = "";
+
+      MONTHS.forEach(month => {
+        ensureMonth(month);
+        const item = yearlyData[month];
+        const hasNote = (item.note || "").trim().length > 0;
+
+        html += `
+          <div class="month-card ${item.open ? 'active' : ''}" onclick="toggleMonth('${month}')">
+            <div class="month-title">${month}</div>
+            <div class="month-sub">${hasNote ? 'יש מיקוד שמור' : 'לחץ להוספה'}</div>
+            ${item.open ? `
+              <textarea
+                class="calendar-note-input"
+                placeholder="כתוב יעד, תזכורת או פוקוס לחודש הזה..."
+                onclick="event.stopPropagation()"
+                oninput="setMonthNote('${month}', this.value)"
+              >${escapeHtml(item.note || "")}</textarea>
+            ` : ``}
+          </div>
+        `;
+      });
+
+      wrap.innerHTML = html;
+    }
+
+    function ensureWeekDay(day) {
+      if (!weeklyCalendarData[day]) {
+        weeklyCalendarData[day] = {
+          open: false,
+          items: []
+        };
+      }
+    }
+
+    function toggleWeekDay(day) {
+      ensureWeekDay(day);
+      weeklyCalendarData[day].open = !weeklyCalendarData[day].open;
+      saveWeeklyCalendarData();
+      renderWeeklyCalendar();
+    }
+
+    function addWeeklyItem(day) {
+      ensureWeekDay(day);
+      weeklyCalendarData[day].items.push({
+        text: "",
+        addToToday: false
+      });
+      saveWeeklyCalendarData();
+      renderWeeklyCalendar();
+    }
+
+    function removeWeeklyItem(day, index) {
+      ensureWeekDay(day);
+      weeklyCalendarData[day].items.splice(index, 1);
+      saveWeeklyCalendarData();
+      renderWeeklyCalendar();
+      renderTodayTasks();
+      updateHomeCounters();
+    }
+
+    function setWeeklyItemText(day, index, value) {
+      ensureWeekDay(day);
+      weeklyCalendarData[day].items[index].text = value;
+      saveWeeklyCalendarData();
+      renderTodayTasks();
+      updateHomeCounters();
+    }
+
+    function setWeeklyItemAddToToday(day, index, value) {
+      ensureWeekDay(day);
+      weeklyCalendarData[day].items[index].addToToday = value;
+      saveWeeklyCalendarData();
+      renderWeeklyCalendar();
+      renderTodayTasks();
+      updateHomeCounters();
+    }
+
+    function renderWeeklyCalendar() {
+      const wrap = document.getElementById("weeklyDaysWrap");
+      let html = "";
+
+      WEEK_DAYS.forEach(day => {
+        ensureWeekDay(day);
+        const d = weeklyCalendarData[day];
+        const activeCount = d.items.filter(item => (item.text || "").trim()).length;
+
+        html += `
+          <div class="week-day-card ${d.open ? 'open' : ''}">
+            <div class="week-day-header" onclick="toggleWeekDay('${day}')">
+              <div>
+                <div class="week-day-title">${day}</div>
+                <div class="week-day-sub">${activeCount} פריטים</div>
+              </div>
+              <div class="week-day-arrow">⌄</div>
+            </div>
+
+            <div class="week-day-body">
+              <div class="week-day-inner">
+                ${d.items.map((item, index) => `
+                  <div class="input-box" style="margin-bottom:12px; padding:14px;">
+                    <div class="week-task-row">
+                      <div class="week-task-label">פריט ביומן</div>
+                      <button class="delete-btn" onclick="event.stopPropagation(); removeWeeklyItem('${day}', ${index})">×</button>
+                    </div>
+
+                    <textarea
+                      class="week-input"
+                      placeholder="כתוב אירוע, משימה, פגישה או משהו חשוב ליום הזה..."
+                      onclick="event.stopPropagation()"
+                      oninput="setWeeklyItemText('${day}', ${index}, this.value)"
+                    >${escapeHtml(item.text || "")}</textarea>
+
+                    <div class="week-task-row" style="padding-bottom:0; border-bottom:none;">
+                      <div class="week-task-label">להוסיף למשימות של היום</div>
+                      <div class="trade-actions">
+                        <button class="mini-btn ${item.addToToday ? 'active-yes' : ''}" onclick="event.stopPropagation(); setWeeklyItemAddToToday('${day}', ${index}, true)">כן</button>
+                        <button class="mini-btn ${item.addToToday === false ? 'active-no' : ''}" onclick="event.stopPropagation(); setWeeklyItemAddToToday('${day}', ${index}, false)">לא</button>
+                      </div>
+                    </div>
+                  </div>
+                `).join("")}
+
+                <button class="add-btn" style="width:100%; height:52px;" onclick="event.stopPropagation(); addWeeklyItem('${day}')">הוסף פריט ליום ${day}</button>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+
+      wrap.innerHTML = html;
+    }
+
+    function getCalendarTasksForToday() {
+      ensureWeekDay(TODAY_NORMALIZED);
+      return (weeklyCalendarData[TODAY_NORMALIZED]?.items || [])
+        .map((item, index) => ({ ...item, index }))
+        .filter(item => item.addToToday && (item.text || "").trim())
+        .map(item => ({
+          id: `calendar-${TODAY_NORMALIZED}-${item.index}`,
+          text: item.text.trim(),
+          source: "calendar",
+          done: false
+        }));
+    }
+
+    function addManualTask() {
+      const input = document.getElementById("manualTaskInput");
+      if (!input) return;
+      const text = input.value.trim();
+      if (!text) return;
+      if (manualTasks.length >= 10) {
+        alert("אפשר להוסיף עד 10 משימות ידניות להיום.");
+        return;
+      }
+
+      manualTasks.push({
+        id: "manual-" + Date.now(),
+        text,
+        done: false
+      });
+
+      input.value = "";
+      saveManualTasks();
+      renderTodayTasks();
+      updateHomeCounters();
+    }
+
+    function toggleManualTask(id) {
+      manualTasks = manualTasks.map(task =>
+        task.id === id ? { ...task, done: !task.done } : task
+      );
+      saveManualTasks();
+      renderTodayTasks();
+    }
+
+    function deleteManualTask(id) {
+      manualTasks = manualTasks.filter(task => task.id !== id);
+      saveManualTasks();
+      renderTodayTasks();
+      updateHomeCounters();
+    }
+
+    function getTodayTasksCombined() {
+      const calendarTasks = getCalendarTasksForToday();
+      const manual = manualTasks.map(task => ({ ...task, source: "manual" }));
+      return [...calendarTasks, ...manual];
+    }
+
+    function renderTodayTasks() {
+      const wrap = document.getElementById("todayTasksList");
+      if (!wrap) return;
+
+      const tasks = getTodayTasksCombined();
+
+      document.getElementById("todayTasksSummaryCount").textContent = tasks.length;
+
+      if (tasks.length === 0) {
+        wrap.innerHTML = `
+          <div class="task-box">
+            <div class="section-title" style="font-size:22px; margin-bottom:8px;">אין משימות כרגע</div>
+            <div class="section-subtitle" style="margin:0;">תוכל להוסיף משימה ידנית או לסמן פריטים מהיומן השבועי שיופיעו כאן.</div>
+          </div>
+        `;
+        updateHomeCounters();
+        return;
+      }
+
+      wrap.innerHTML = tasks.map(task => {
+        const isManual = task.source === "manual";
+        const doneClass = isManual && task.done ? "done" : "";
+
+        return `
+          <div class="task-item ${doneClass}">
+            <div class="task-left">
+              <div class="task-check" onclick="${isManual ? `toggleManualTask('${task.id}')` : `void(0)`}">${isManual && task.done ? '✓' : ''}</div>
+              <div class="task-text">
+                <div class="task-title">${escapeHtml(task.text)}</div>
+                <div class="task-right" style="margin-top:8px;">
+                  ${task.source === "calendar" ? `<span class="source-badge">נוסף מהיומן</span>` : `<span class="calendar-badge">ידני</span>`}
+                </div>
+              </div>
+            </div>
+            <div class="task-right">
+              ${isManual ? `<button class="delete-btn" onclick="deleteManualTask('${task.id}')">×</button>` : ``}
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      updateHomeCounters();
+    }
+
+    function getYearlyNotesCount() {
+      return MONTHS.filter(month => (yearlyData[month]?.note || "").trim()).length;
+    }
+
+    function getWeeklyEventsCount() {
+      let count = 0;
+      WEEK_DAYS.forEach(day => {
+        ensureWeekDay(day);
+        count += (weeklyCalendarData[day].items || []).filter(item => (item.text || "").trim()).length;
+      });
+      return count;
+    }
+
+    function updateHomeCounters() {
+      const yearlyCountEl = document.getElementById("yearlyNotesCount");
+      const weeklyCountEl = document.getElementById("weeklyEventsCount");
+      const todayCountEl = document.getElementById("todayTasksCount");
+
+      if (yearlyCountEl) yearlyCountEl.textContent = getYearlyNotesCount();
+      if (weeklyCountEl) weeklyCountEl.textContent = getWeeklyEventsCount();
+      if (todayCountEl) todayCountEl.textContent = getTodayTasksCombined().length;
     }
 
     updateWorkoutUI();
     renderTrading();
+    renderYearlyCalendar();
+    renderWeeklyCalendar();
+    renderTodayTasks();
+    updateHomeCounters();
   </script>
 </body>
 </html>
