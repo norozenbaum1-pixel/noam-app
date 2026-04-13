@@ -1,1485 +1,251 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#121826" />
-  <title>השבוע שלי</title>
-
-  <style>
-    :root {
-      --bg-1: #0f172a;
-      --bg-2: #182338;
-      --bg-3: #25324a;
-      --card-bg: rgba(255,255,255,0.08);
-      --card-bg-2: rgba(255,255,255,0.05);
-      --card-border: rgba(255,255,255,0.12);
-      --text: #f8fafc;
-      --muted: rgba(248,250,252,0.72);
-      --shadow: 0 18px 40px rgba(0,0,0,0.22);
-      --green: #22c55e;
-      --red: #ef4444;
-      --yellow: #f59e0b;
-      --blue: #3b82f6;
-      --purple: #8b5cf6;
-      --white: #ffffff;
-    }
-
-    * {
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    html {
-      margin: 0;
-      padding: 0;
-      min-height: 100%;
-      background:
-        radial-gradient(circle at top right, rgba(59,130,246,0.14), transparent 28%),
-        radial-gradient(circle at bottom left, rgba(168,85,247,0.10), transparent 30%),
-        linear-gradient(160deg, var(--bg-1) 0%, var(--bg-2) 50%, var(--bg-3) 100%);
-      background-attachment: fixed;
-    }
-
-    body {
-      margin: 0;
-      padding: 0;
-      min-height: 100vh;
-      min-height: 100dvh;
-      color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Arial, sans-serif;
-      background: transparent;
-    }
-
-    .app-bg {
-      min-height: 100vh;
-      min-height: 100dvh;
-      padding-top: calc(env(safe-area-inset-top) + 18px);
-      padding-bottom: calc(env(safe-area-inset-bottom) + 24px);
-      padding-left: 16px;
-      padding-right: 16px;
-      background:
-        radial-gradient(circle at top right, rgba(59,130,246,0.14), transparent 28%),
-        radial-gradient(circle at bottom left, rgba(168,85,247,0.10), transparent 30%),
-        linear-gradient(160deg, var(--bg-1) 0%, var(--bg-2) 50%, var(--bg-3) 100%);
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    .container {
-      width: 100%;
-      max-width: 430px;
-      margin: 0 auto;
-    }
-
-    .home-title {
-      text-align: center;
-      font-size: 52px;
-      line-height: 1;
-      font-weight: 900;
-      letter-spacing: -1.5px;
-      margin: 10px 0 26px;
-      text-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
-    }
-
-    .cards-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
-
-    .home-card {
-      position: relative;
-      min-height: 126px;
-      border-radius: 28px;
-      padding: 18px 14px;
-      background: linear-gradient(180deg, var(--card-bg), var(--card-bg-2));
-      border: 1px solid var(--card-border);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      overflow: hidden;
-      transition: transform 0.18s ease, border-color 0.18s ease;
-      cursor: pointer;
-    }
-
-    .home-card::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(255,255,255,0.06), transparent 58%);
-      pointer-events: none;
-    }
-
-    .home-card:active,
-    .workout-row:active,
-    .bonus-row:active,
-    .trade-day-header:active,
-    .trade-toggle-btn:active,
-    .trade-color-btn:active,
-    .calendar-day-card:active,
-    .task-check:active,
-    .mini-btn:active,
-    .week-day-card:active,
-    .month-card:active {
-      transform: scale(0.985);
-    }
-
-    .home-card-title {
-      position: relative;
-      z-index: 1;
-      font-size: 20px;
-      font-weight: 800;
-      margin-bottom: 8px;
-    }
-
-    .home-card-sub {
-      position: relative;
-      z-index: 1;
-      font-size: 15px;
-      color: var(--muted);
-      font-weight: 500;
-      text-align: center;
-    }
-
-    .top-row {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      margin-bottom: 10px;
-    }
-
-    .back-btn {
-      width: 44px;
-      height: 44px;
-      border-radius: 999px;
-      border: none;
-      background: #fff;
-      color: #94a3b8;
-      font-size: 24px;
-      font-weight: 900;
-      box-shadow: 0 10px 24px rgba(0,0,0,0.22);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-    }
-
-    .page-title {
-      text-align: center;
-      font-size: 38px;
-      line-height: 1.05;
-      font-weight: 900;
-      letter-spacing: -1px;
-      margin: 6px 0 24px;
-      text-shadow: 0 8px 24px rgba(0,0,0,0.22);
-    }
-
-    .section-title {
-      font-size: 24px;
-      font-weight: 900;
-      margin: 0 0 14px;
-      text-align: center;
-    }
-
-    .section-subtitle {
-      font-size: 14px;
-      color: var(--muted);
-      text-align: center;
-      margin: -4px 0 16px;
-    }
-
-    .workout-list,
-    .trading-list,
-    .calendar-list,
-    .tasks-list,
-    .week-days-list,
-    .months-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .months-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-    }
-
-    .workout-row,
-    .bonus-row,
-    .progress-box,
-    .trade-day-card,
-    .summary-box,
-    .calendar-day-card,
-    .task-box,
-    .week-day-card,
-    .month-card,
-    .input-box,
-    .small-summary-box {
-      border-radius: 24px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.06));
-      border: 1px solid var(--card-border);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-    }
-
-    .workout-row,
-    .bonus-row {
-      min-height: 82px;
-      padding: 0 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      cursor: pointer;
-      transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
-    }
-
-    .workout-row.done,
-    .bonus-row.done,
-    .task-item.done {
-      border-color: rgba(255,255,255,0.24);
-      background: linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0.09));
-    }
-
-    .row-right {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .check-circle,
-    .task-check {
-      width: 30px;
-      height: 30px;
-      border-radius: 999px;
-      border: 2px solid rgba(255,255,255,0.34);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-      font-weight: 900;
-      color: transparent;
-      background: rgba(255,255,255,0.04);
-      transition: all 0.22s ease;
-      flex-shrink: 0;
-      cursor: pointer;
-    }
-
-    .done .check-circle,
-    .task-item.done .task-check {
-      color: white;
-      border-color: rgba(255,255,255,0.25);
-      background: rgba(34,197,94,0.9);
-      box-shadow: 0 8px 20px rgba(34,197,94,0.28);
-    }
-
-    .row-title,
-    .task-title,
-    .calendar-title,
-    .week-day-title,
-    .month-title {
-      font-size: 21px;
-      font-weight: 800;
-      letter-spacing: -0.3px;
-    }
-
-    .row-sub,
-    .task-sub,
-    .calendar-sub,
-    .week-day-sub,
-    .month-sub {
-      font-size: 14px;
-      color: var(--muted);
-      margin-top: 3px;
-      font-weight: 500;
-    }
-
-    .progress-box,
-    .summary-box,
-    .task-box,
-    .input-box,
-    .small-summary-box {
-      padding: 18px 16px;
-    }
-
-    .progress-box {
-      margin-top: 22px;
-      padding-bottom: 8px;
-    }
-
-    .progress-label {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-      font-size: 16px;
-      font-weight: 700;
-    }
-
-    .progress-track {
-      width: 100%;
-      height: 16px;
-      border-radius: 999px;
-      overflow: hidden;
-      background: rgba(255,255,255,0.11);
-      box-shadow: inset 0 3px 8px rgba(0,0,0,0.16);
-    }
-
-    .progress-fill {
-      width: 0%;
-      height: 100%;
-      border-radius: 999px;
-      background: var(--red);
-      transition: width 0.35s ease, background 0.35s ease;
-      box-shadow: 0 0 18px rgba(255,255,255,0.12);
-    }
-
-    .bonus-message {
-      min-height: 28px;
-      padding-top: 14px;
-      text-align: center;
-      font-size: 17px;
-      font-weight: 800;
-      color: #d1fae5;
-      opacity: 0;
-      transform: translateY(6px);
-      transition: opacity 0.25s ease, transform 0.25s ease;
-    }
-
-    .bonus-message.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .trade-day-card,
-    .week-day-card,
-    .calendar-day-card {
-      overflow: hidden;
-      transition: 0.25s ease;
-    }
-
-    .trade-day-header,
-    .week-day-header,
-    .calendar-day-header {
-      min-height: 74px;
-      padding: 0 18px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      cursor: pointer;
-    }
-
-    .trade-day-title,
-    .week-day-title,
-    .calendar-title {
-      font-size: 24px;
-      font-weight: 900;
-    }
-
-    .trade-day-arrow,
-    .week-day-arrow,
-    .calendar-day-arrow {
-      font-size: 22px;
-      color: var(--muted);
-      transition: transform 0.22s ease;
-    }
-
-    .trade-day-card.open .trade-day-arrow,
-    .week-day-card.open .week-day-arrow,
-    .calendar-day-card.open .calendar-day-arrow {
-      transform: rotate(180deg);
-    }
-
-    .trade-day-body,
-    .week-day-body,
-    .calendar-day-body {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.32s ease;
-      border-top: 1px solid rgba(255,255,255,0.08);
-    }
-
-    .trade-day-card.open .trade-day-body,
-    .week-day-card.open .week-day-body,
-    .calendar-day-card.open .calendar-day-body {
-      max-height: 800px;
-    }
-
-    .trade-day-inner,
-    .week-day-inner,
-    .calendar-day-inner {
-      padding: 14px 16px 16px;
-    }
-
-    .trade-item,
-    .week-task-row,
-    .calendar-note-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      padding: 12px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-    }
-
-    .trade-item:last-of-type,
-    .week-task-row:last-of-type,
-    .calendar-note-row:last-of-type {
-      border-bottom: none;
-    }
-
-    .trade-label,
-    .week-task-label,
-    .calendar-note-label {
-      font-size: 16px;
-      font-weight: 700;
-    }
-
-    .trade-actions {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .trade-toggle-btn,
-    .trade-color-btn,
-    .mini-btn {
-      border: none;
-      min-width: 54px;
-      height: 36px;
-      padding: 0 12px;
-      border-radius: 999px;
-      font-weight: 800;
-      cursor: pointer;
-      color: white;
-      background: rgba(255,255,255,0.12);
-      transition: 0.2s ease;
-    }
-
-    .mini-btn {
-      min-width: unset;
-      padding: 0 14px;
-      background: rgba(59,130,246,0.88);
-    }
-
-    .trade-toggle-btn.active-yes,
-    .mini-btn.active-yes {
-      background: rgba(34,197,94,0.92);
-      box-shadow: 0 8px 20px rgba(34,197,94,0.25);
-    }
-
-    .trade-toggle-btn.active-no,
-    .mini-btn.active-no {
-      background: rgba(239,68,68,0.92);
-      box-shadow: 0 8px 20px rgba(239,68,68,0.25);
-    }
-
-    .trade-color-btn.green.active {
-      background: rgba(34,197,94,0.92);
-      box-shadow: 0 8px 20px rgba(34,197,94,0.25);
-    }
-
-    .trade-color-btn.red.active {
-      background: rgba(239,68,68,0.92);
-      box-shadow: 0 8px 20px rgba(239,68,68,0.25);
-    }
-
-    .trade-note,
-    .week-input,
-    .calendar-note-input,
-    .task-input {
-      width: 100%;
-      margin-top: 14px;
-      border: 1px solid rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.08);
-      border-radius: 18px;
-      padding: 14px;
-      color: white;
-      font-size: 15px;
-      resize: vertical;
-      min-height: 82px;
-      outline: none;
-      font-family: inherit;
-    }
-
-    .trade-note::placeholder,
-    .week-input::placeholder,
-    .calendar-note-input::placeholder,
-    .task-input::placeholder {
-      color: rgba(255,255,255,0.55);
-    }
-
-    .summary-title {
-      font-size: 24px;
-      font-weight: 900;
-      margin-bottom: 14px;
-      text-align: center;
-    }
-
-    .summary-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    .summary-stat {
-      border-radius: 18px;
-      padding: 14px 12px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.08);
-      text-align: center;
-    }
-
-    .summary-number {
-      font-size: 28px;
-      font-weight: 900;
-      margin-bottom: 4px;
-    }
-
-    .summary-label {
-      font-size: 14px;
-      color: var(--muted);
-      font-weight: 600;
-    }
-
-    .month-card {
-      min-height: 118px;
-      padding: 16px 14px;
-      cursor: pointer;
-      transition: transform 0.18s ease;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .month-card.active {
-      border-color: rgba(255,255,255,0.24);
-      box-shadow: 0 18px 40px rgba(0,0,0,0.24);
-    }
-
-    .month-title {
-      text-align: center;
-      margin-bottom: 6px;
-    }
-
-    .month-sub {
-      text-align: center;
-    }
-
-    .calendar-day-card,
-    .week-day-card {
-      padding: 0;
-    }
-
-    .calendar-badge,
-    .source-badge,
-    .count-badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 999px;
-      padding: 5px 10px;
-      font-size: 12px;
-      font-weight: 800;
-      background: rgba(255,255,255,0.12);
-      color: white;
-      white-space: nowrap;
-    }
-
-    .source-badge {
-      background: rgba(59,130,246,0.22);
-      border: 1px solid rgba(59,130,246,0.22);
-    }
-
-    .count-badge {
-      background: rgba(34,197,94,0.18);
-      border: 1px solid rgba(34,197,94,0.20);
-    }
-
-    .task-item {
-      min-height: 78px;
-      border-radius: 22px;
-      padding: 14px 14px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.10);
-      transition: 0.2s ease;
-    }
-
-    .task-left {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex: 1;
-      min-width: 0;
-    }
-
-    .task-text {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .task-title {
-      font-size: 18px;
-      word-break: break-word;
-    }
-
-    .task-item.done .task-title {
-      text-decoration: line-through;
-      opacity: 0.72;
-    }
-
-    .task-right {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-shrink: 0;
-    }
-
-    .delete-btn {
-      width: 34px;
-      height: 34px;
-      border-radius: 999px;
-      border: none;
-      background: rgba(239,68,68,0.18);
-      color: #fecaca;
-      font-size: 16px;
-      font-weight: 900;
-      cursor: pointer;
-    }
-
-    .inline-row {
-      display: flex;
-      gap: 10px;
-      align-items: stretch;
-    }
-
-    .inline-row .task-input {
-      margin-top: 0;
-      min-height: 54px;
-      resize: none;
-      flex: 1;
-    }
-
-    .add-btn {
-      min-width: 90px;
-      border: none;
-      border-radius: 18px;
-      background: linear-gradient(180deg, rgba(59,130,246,0.95), rgba(37,99,235,0.92));
-      color: white;
-      font-size: 16px;
-      font-weight: 900;
-      cursor: pointer;
-      box-shadow: 0 10px 22px rgba(37,99,235,0.25);
-    }
-
-    .small-summary-box {
-      margin-top: 18px;
-      text-align: center;
-    }
-
-    .small-summary-title {
-      font-size: 18px;
-      font-weight: 900;
-      margin-bottom: 8px;
-    }
-
-    .small-summary-text {
-      font-size: 14px;
-      color: var(--muted);
-      line-height: 1.5;
-    }
-
-    @media (max-width: 390px) {
-      .home-title { font-size: 46px; }
-      .page-title { font-size: 34px; }
-      .home-card { min-height: 118px; }
-      .trade-label, .week-task-label, .calendar-note-label { font-size: 15px; }
-      .summary-grid, .months-grid { grid-template-columns: 1fr 1fr; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>השבוע שלי</title>
+
+<style>
+body {
+margin:0;
+font-family:Arial;
+background:linear-gradient(#0f172a,#1e293b);
+color:white;
+}
+
+.container {
+max-width:420px;
+margin:auto;
+padding:20px;
+}
+
+.title {
+font-size:42px;
+text-align:center;
+margin-bottom:20px;
+font-weight:bold;
+}
+
+.grid {
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+}
+
+.card {
+background:#1e293b;
+padding:20px;
+border-radius:20px;
+text-align:center;
+cursor:pointer;
+}
+
+.page {display:none;}
+.active {display:block;}
+
+.back {
+background:white;
+color:black;
+border:none;
+border-radius:50%;
+width:40px;
+height:40px;
+margin-bottom:10px;
+}
+
+.row {
+background:#1e293b;
+padding:15px;
+border-radius:15px;
+margin-bottom:10px;
+display:flex;
+justify-content:space-between;
+cursor:pointer;
+}
+
+.done {background:#22c55e;}
+
+.progress {
+height:12px;
+background:#374151;
+border-radius:10px;
+overflow:hidden;
+margin-top:15px;
+}
+
+.progress div {
+height:100%;
+background:red;
+width:0%;
+}
+
+.input {
+width:100%;
+padding:10px;
+margin-top:10px;
+border-radius:10px;
+border:none;
+}
+
+</style>
 </head>
+
 <body>
-  <div id="homePage" class="app-bg">
-    <div class="container">
-      <div class="home-title">השבוע שלי</div>
 
-      <div class="cards-grid">
-        <div class="home-card" onclick="openWorkouts()">
-          <div class="home-card-title">אימונים</div>
-          <div class="home-card-sub"><span id="homeCounter">0</span>/3 השבוע</div>
-        </div>
+<div id="home" class="container active">
+<div class="title">השבוע שלי</div>
+
+<div class="grid">
+<div class="card" onclick="openPage('workouts')">אימונים</div>
+<div class="card" onclick="openPage('trading')">מסחר</div>
+<div class="card" onclick="openPage('weekly')">יומן שבועי</div>
+<div class="card" onclick="openPage('tasks')">משימות להיום</div>
+</div>
+</div>
+
+<div id="workouts" class="container page">
+<button class="back" onclick="goHome()">←</button>
+<h2>האימונים שלי</h2>
+
+<div id="w1" class="row" onclick="toggleWorkout(1)">אימון 1</div>
+<div id="w2" class="row" onclick="toggleWorkout(2)">אימון 2</div>
+<div id="w3" class="row" onclick="toggleWorkout(3)">אימון 3</div>
+
+<div id="bonus" class="row" onclick="toggleBonus()">אימון בונוס</div>
+
+<div class="progress"><div id="bar"></div></div>
+</div>
+
+<div id="trading" class="container page">
+<button class="back" onclick="goHome()">←</button>
+<h2>מסחר</h2>
+
+<div id="trade"></div>
+</div>
+
+<div id="weekly" class="container page">
+<button class="back" onclick="goHome()">←</button>
+<h2>יומן שבועי</h2>
+<div id="days"></div>
+</div>
+
+<div id="tasks" class="container page">
+<button class="back" onclick="goHome()">←</button>
+<h2>משימות להיום</h2>
+
+<input id="title" class="input" placeholder="כותרת">
+<input id="time" class="input" type="time">
+<textarea id="desc" class="input" placeholder="פירוט"></textarea>
+
+<button onclick="addTask()">הוסף</button>
+
+<div id="taskList"></div>
+</div>
+
+<script>
+
+// NAV
+function openPage(id){
+document.querySelectorAll('.container').forEach(x=>x.classList.remove('active'))
+document.getElementById(id).classList.add('active')
+}
+function goHome(){openPage('home')}
+
+// WORKOUTS
+let workouts=JSON.parse(localStorage.getItem("w")||"[0,0,0]")
+let bonus=localStorage.getItem("b")=="1"
+
+function toggleWorkout(i){
+workouts[i-1]=!workouts[i-1]
+saveW()
+}
+function toggleBonus(){
+bonus=!bonus
+saveW()
+}
+function saveW(){
+localStorage.setItem("w",JSON.stringify(workouts))
+localStorage.setItem("b",bonus?"1":"0")
+renderW()
+}
+function renderW(){
+for(let i=1;i<=3;i++){
+document.getElementById("w"+i).classList.toggle("done",workouts[i-1])
+}
+document.getElementById("bonus").classList.toggle("done",bonus)
+
+let count=workouts.filter(x=>x).length
+let bar=document.getElementById("bar")
+bar.style.width=(count/3*100)+"%"
+bar.style.background=count<2?"red":count==2?"orange":"green"
+}
+renderW()
+
+// TRADING
+let days=["שני","שלישי","רביעי","חמישי","שישי"]
+let trade=JSON.parse(localStorage.getItem("t")||"{}")
+
+function renderTrade(){
+let html=""
+days.forEach(d=>{
+if(!trade[d]) trade[d]={}
+html+=`
+<div class="row">
+${d}
+<button onclick="setT('${d}','yes')">כן</button>
+<button onclick="setT('${d}','no')">לא</button>
+</div>`
+})
+document.getElementById("trade").innerHTML=html
+}
+function setT(day,val){
+trade[day]=val
+localStorage.setItem("t",JSON.stringify(trade))
+}
+renderTrade()
+
+// WEEKLY
+let weekly=JSON.parse(localStorage.getItem("weekly")||"{}")
+
+function renderDays(){
+let html=""
+days.forEach(d=>{
+html+=`<div class="row" onclick="addWeekly('${d}')">${d}</div>`
+})
+document.getElementById("days").innerHTML=html
+}
+function addWeekly(day){
+let t=prompt("כותרת?")
+if(!t)return
+if(!weekly[day]) weekly[day]=[]
+weekly[day].push(t)
+localStorage.setItem("weekly",JSON.stringify(weekly))
+}
+renderDays()
+
+// TASKS
+let tasks=JSON.parse(localStorage.getItem("tasks")||"[]")
+
+function addTask(){
+let t=document.getElementById("title").value
+let time=document.getElementById("time").value
+let d=document.getElementById("desc").value
+
+tasks.push({t,time,d})
+localStorage.setItem("tasks",JSON.stringify(tasks))
+renderTasks()
+}
+
+function renderTasks(){
+let html=""
+tasks.forEach(x=>{
+html+=`<div class="row">${x.time||""} ${x.t}</div>`
+})
+document.getElementById("taskList").innerHTML=html
+}
+renderTasks()
+
+</script>
 
-        <div class="home-card" onclick="openTrading()">
-          <div class="home-card-title">מסחר</div>
-          <div class="home-card-sub"><span id="tradeDaysCount">0</span>/5 סחרתי</div>
-        </div>
-
-        <div class="home-card" onclick="openYearlyCalendar()">
-          <div class="home-card-title">יומן שנתי</div>
-          <div class="home-card-sub"><span id="yearlyNotesCount">0</span> חודשי מיקוד</div>
-        </div>
-
-        <div class="home-card" onclick="openWeeklyCalendar()">
-          <div class="home-card-title">יומן שבועי</div>
-          <div class="home-card-sub"><span id="weeklyEventsCount">0</span> פריטים ביומן</div>
-        </div>
-
-        <div class="home-card" onclick="openTodayTasks()">
-          <div class="home-card-title">המשימות להיום</div>
-          <div class="home-card-sub"><span id="todayTasksCount">0</span> משימות היום</div>
-        </div>
-
-        <div class="home-card">
-          <div class="home-card-title">יעדים</div>
-          <div class="home-card-sub">בקרוב</div>
-        </div>
-
-        <div class="home-card">
-          <div class="home-card-title">תזונה</div>
-          <div class="home-card-sub">בקרוב</div>
-        </div>
-
-        <div class="home-card">
-          <div class="home-card-title">פתקים</div>
-          <div class="home-card-sub">בקרוב</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="workoutsPage" class="app-bg hidden">
-    <div class="container">
-      <div class="top-row">
-        <button class="back-btn" onclick="goHomeFromWorkouts()">←</button>
-      </div>
-
-      <div class="page-title">האימונים שלי</div>
-
-      <div class="workout-list">
-        <div id="workout1" class="workout-row" onclick="toggleWorkout(1)">
-          <div class="row-right">
-            <div class="check-circle">✓</div>
-            <div>
-              <div class="row-title">אימון 1</div>
-              <div class="row-sub">לחץ לסימון</div>
-            </div>
-          </div>
-        </div>
-
-        <div id="workout2" class="workout-row" onclick="toggleWorkout(2)">
-          <div class="row-right">
-            <div class="check-circle">✓</div>
-            <div>
-              <div class="row-title">אימון 2</div>
-              <div class="row-sub">לחץ לסימון</div>
-            </div>
-          </div>
-        </div>
-
-        <div id="workout3" class="workout-row" onclick="toggleWorkout(3)">
-          <div class="row-right">
-            <div class="check-circle">✓</div>
-            <div>
-              <div class="row-title">אימון 3</div>
-              <div class="row-sub">לחץ לסימון</div>
-            </div>
-          </div>
-        </div>
-
-        <div id="bonusRow" class="bonus-row" onclick="toggleBonus()">
-          <div class="row-right">
-            <div class="check-circle">✓</div>
-            <div>
-              <div class="row-title">אימון בונוס</div>
-              <div class="row-sub">לאלופים בלבד</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="progress-box">
-        <div class="progress-label">
-          <span>התקדמות שבועית</span>
-          <span id="progressText">0/3</span>
-        </div>
-
-        <div class="progress-track">
-          <div id="progressFill" class="progress-fill"></div>
-        </div>
-
-        <div id="bonusMessage" class="bonus-message">אלוף, ביצעת אימון בונוס</div>
-      </div>
-    </div>
-  </div>
-
-  <div id="tradingPage" class="app-bg hidden">
-    <div class="container">
-      <div class="top-row">
-        <button class="back-btn" onclick="goHomeFromTrading()">←</button>
-      </div>
-
-      <div class="page-title">המסחר שלי</div>
-
-      <div id="tradingDays" class="trading-list"></div>
-
-      <div class="summary-box">
-        <div class="summary-title">סיכום שבועי</div>
-        <div class="summary-grid">
-          <div class="summary-stat">
-            <div id="sumTraded" class="summary-number">0/5</div>
-            <div class="summary-label">סחרתי</div>
-          </div>
-          <div class="summary-stat">
-            <div id="sumSetup" class="summary-number">0/5</div>
-            <div class="summary-label">פעלתי לפי הסטאפ</div>
-          </div>
-          <div class="summary-stat">
-            <div id="sumGreen" class="summary-number">0/5</div>
-            <div class="summary-label">ימים ירוקים</div>
-          </div>
-          <div class="summary-stat">
-            <div id="sumHappy" class="summary-number">0/5</div>
-            <div class="summary-label">מרוצה מעצמי</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="yearlyCalendarPage" class="app-bg hidden">
-    <div class="container">
-      <div class="top-row">
-        <button class="back-btn" onclick="goHomeFromYearlyCalendar()">←</button>
-      </div>
-
-      <div class="page-title">היומן השנתי</div>
-      <div class="section-subtitle">בחר חודש, כתוב מיקוד שנתי, יעד או תזכורת חשובה</div>
-
-      <div id="monthsGrid" class="months-grid"></div>
-
-      <div class="small-summary-box">
-        <div class="small-summary-title">למה זה טוב</div>
-        <div class="small-summary-text">
-          כאן אתה שומר כיוון רחב לכל חודש — תקופות עמוסות, יעדים מרכזיים, חגים, חופשות, והשקה של מטרות.
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="weeklyCalendarPage" class="app-bg hidden">
-    <div class="container">
-      <div class="top-row">
-        <button class="back-btn" onclick="goHomeFromWeeklyCalendar()">←</button>
-      </div>
-
-      <div class="page-title">היומן השבועי</div>
-      <div class="section-subtitle">כל יום נפתח בלחיצה. אפשר לכתוב אירועים ומשימות שיופיעו גם במשימות להיום.</div>
-
-      <div id="weeklyDaysWrap" class="week-days-list"></div>
-
-      <div class="small-summary-box">
-        <div class="small-summary-title">יתרון פרודוקטיבי</div>
-        <div class="small-summary-text">
-          כל פריט שאתה מוסיף כאן עם סימון "למשימות היום" יופיע אוטומטית במסך המשימות, עם תווית "נוסף מהיומן".
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="todayTasksPage" class="app-bg hidden">
-    <div class="container">
-      <div class="top-row">
-        <button class="back-btn" onclick="goHomeFromTodayTasks()">←</button>
-      </div>
-
-      <div class="page-title">המשימות להיום</div>
-      <div class="section-subtitle">כולל משימות שנוספו ידנית וגם פריטים שמגיעים מהיומן השבועי.</div>
-
-      <div class="input-box">
-        <div class="section-title" style="font-size:22px; margin-bottom:12px;">הוסף משימה אישית</div>
-        <div class="inline-row">
-          <textarea id="manualTaskInput" class="task-input" placeholder="כתוב משימה להיום... אפשר עד 10 משימות ידניות."></textarea>
-          <button class="add-btn" onclick="addManualTask()">הוסף</button>
-        </div>
-      </div>
-
-      <div class="small-summary-box">
-        <div class="small-summary-title">היום יש לך <span id="todayTasksSummaryCount">0</span> משימות</div>
-        <div class="small-summary-text">
-          המשימות מהיומן מסומנות כדי שתדע מה הגיע מתכנון שבועי ומה הוספת ידנית.
-        </div>
-      </div>
-
-      <div id="todayTasksList" class="tasks-list"></div>
-    </div>
-  </div>
-
-  <script>
-    const WORKOUTS_KEY = "noam_workouts_v6";
-    const BONUS_KEY = "noam_bonus_v6";
-    const TRADE_KEY = "noam_trade_v3";
-    const YEARLY_KEY = "noam_yearly_v1";
-    const WEEKLY_CAL_KEY = "noam_weekly_calendar_v1";
-    const MANUAL_TASKS_KEY = "noam_manual_tasks_v1";
-
-    const TRADE_DAYS = ["שני", "שלישי", "רביעי", "חמישי", "שישי"];
-    const WEEK_DAYS = ["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת"];
-    const MONTHS = ["ינואר","פברואר","מרץ","אפריל","מאי","יוני","יולי","אוגוסט","ספטמבר","אוקטובר","נובמבר","דצמבר"];
-    const TODAY_DAY_NAME = new Date().toLocaleDateString("he-IL", { weekday: "long" }).replace("יום ", "");
-
-    let workouts = JSON.parse(localStorage.getItem(WORKOUTS_KEY)) || [false, false, false];
-    let bonusDone = JSON.parse(localStorage.getItem(BONUS_KEY)) || false;
-    let tradeData = JSON.parse(localStorage.getItem(TRADE_KEY)) || {};
-    let yearlyData = JSON.parse(localStorage.getItem(YEARLY_KEY)) || {};
-    let weeklyCalendarData = JSON.parse(localStorage.getItem(WEEKLY_CAL_KEY)) || {};
-    let manualTasks = JSON.parse(localStorage.getItem(MANUAL_TASKS_KEY)) || [];
-
-    function getCssVar(name) {
-      return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-    }
-
-    function escapeHtml(text) {
-      return String(text)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;");
-    }
-
-    function normalizeDayName(name) {
-      const map = {
-        "יום ראשון": "ראשון",
-        "יום שני": "שני",
-        "יום שלישי": "שלישי",
-        "יום רביעי": "רביעי",
-        "יום חמישי": "חמישי",
-        "יום שישי": "שישי",
-        "יום שבת": "שבת",
-      };
-      return map[name] || name;
-    }
-
-    const TODAY_NORMALIZED = normalizeDayName(TODAY_DAY_NAME);
-
-    function saveWorkoutData() {
-      localStorage.setItem(WORKOUTS_KEY, JSON.stringify(workouts));
-      localStorage.setItem(BONUS_KEY, JSON.stringify(bonusDone));
-    }
-
-    function saveTradeData() {
-      localStorage.setItem(TRADE_KEY, JSON.stringify(tradeData));
-    }
-
-    function saveYearlyData() {
-      localStorage.setItem(YEARLY_KEY, JSON.stringify(yearlyData));
-    }
-
-    function saveWeeklyCalendarData() {
-      localStorage.setItem(WEEKLY_CAL_KEY, JSON.stringify(weeklyCalendarData));
-    }
-
-    function saveManualTasks() {
-      localStorage.setItem(MANUAL_TASKS_KEY, JSON.stringify(manualTasks));
-    }
-
-    function getCompletedWorkoutCount() {
-      return workouts.filter(Boolean).length;
-    }
-
-    function getWorkoutProgressColor(count) {
-      if (count <= 1) return getCssVar("--red");
-      if (count === 2) return getCssVar("--yellow");
-      return getCssVar("--green");
-    }
-
-    function updateWorkoutUI() {
-      const count = getCompletedWorkoutCount();
-      document.getElementById("homeCounter").textContent = count;
-      document.getElementById("progressText").textContent = count + "/3";
-
-      for (let i = 1; i <= 3; i++) {
-        const row = document.getElementById("workout" + i);
-        if (workouts[i - 1]) row.classList.add("done");
-        else row.classList.remove("done");
-      }
-
-      const progressFill = document.getElementById("progressFill");
-      progressFill.style.width = Math.min((count / 3) * 100, 100) + "%";
-      progressFill.style.background = getWorkoutProgressColor(count);
-
-      const bonusRow = document.getElementById("bonusRow");
-      const bonusMessage = document.getElementById("bonusMessage");
-
-      if (bonusDone) {
-        bonusRow.classList.add("done");
-        bonusMessage.classList.add("show");
-      } else {
-        bonusRow.classList.remove("done");
-        bonusMessage.classList.remove("show");
-      }
-    }
-
-    function openOnly(pageId) {
-      ["homePage","workoutsPage","tradingPage","yearlyCalendarPage","weeklyCalendarPage","todayTasksPage"].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.classList.add("hidden");
-      });
-      document.getElementById(pageId).classList.remove("hidden");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    function openWorkouts() { openOnly("workoutsPage"); }
-    function goHomeFromWorkouts() { openOnly("homePage"); }
-
-    function openTrading() {
-      renderTrading();
-      openOnly("tradingPage");
-    }
-    function goHomeFromTrading() { openOnly("homePage"); }
-
-    function openYearlyCalendar() {
-      renderYearlyCalendar();
-      openOnly("yearlyCalendarPage");
-    }
-    function goHomeFromYearlyCalendar() { openOnly("homePage"); }
-
-    function openWeeklyCalendar() {
-      renderWeeklyCalendar();
-      openOnly("weeklyCalendarPage");
-    }
-    function goHomeFromWeeklyCalendar() { openOnly("homePage"); }
-
-    function openTodayTasks() {
-      renderTodayTasks();
-      openOnly("todayTasksPage");
-    }
-    function goHomeFromTodayTasks() { openOnly("homePage"); }
-
-    function toggleWorkout(index) {
-      workouts[index - 1] = !workouts[index - 1];
-      saveWorkoutData();
-      updateWorkoutUI();
-    }
-
-    function toggleBonus() {
-      bonusDone = !bonusDone;
-      saveWorkoutData();
-      updateWorkoutUI();
-    }
-
-    function ensureTradeDay(day) {
-      if (!tradeData[day]) {
-        tradeData[day] = {
-          open: false,
-          traded: "",
-          setup: "",
-          color: "",
-          happy: "",
-          note: ""
-        };
-      }
-    }
-
-    function toggleTradeDay(day) {
-      ensureTradeDay(day);
-      tradeData[day].open = !tradeData[day].open;
-      saveTradeData();
-      renderTrading();
-    }
-
-    function setTradeValue(day, key, value) {
-      ensureTradeDay(day);
-      tradeData[day][key] = value;
-      saveTradeData();
-      renderTrading();
-    }
-
-    function setTradeNote(day, value) {
-      ensureTradeDay(day);
-      tradeData[day].note = value;
-      saveTradeData();
-    }
-
-    function getTradeSummary() {
-      let traded = 0, setup = 0, green = 0, happy = 0;
-      TRADE_DAYS.forEach(day => {
-        ensureTradeDay(day);
-        const d = tradeData[day];
-        if (d.traded === "yes") traded++;
-        if (d.setup === "yes") setup++;
-        if (d.color === "green") green++;
-        if (d.happy === "yes") happy++;
-      });
-      return { traded, setup, green, happy };
-    }
-
-    function renderTrading() {
-      const wrap = document.getElementById("tradingDays");
-      let html = "";
-
-      TRADE_DAYS.forEach(day => {
-        ensureTradeDay(day);
-        const d = tradeData[day];
-
-        html += `
-          <div class="trade-day-card ${d.open ? 'open' : ''}">
-            <div class="trade-day-header" onclick="toggleTradeDay('${day}')">
-              <div class="trade-day-title">${day}</div>
-              <div class="trade-day-arrow">⌄</div>
-            </div>
-
-            <div class="trade-day-body">
-              <div class="trade-day-inner">
-                <div class="trade-item">
-                  <div class="trade-label">סחרתי היום</div>
-                  <div class="trade-actions">
-                    <button class="trade-toggle-btn ${d.traded === 'yes' ? 'active-yes' : ''}" onclick="event.stopPropagation(); setTradeValue('${day}','traded','yes')">כן</button>
-                    <button class="trade-toggle-btn ${d.traded === 'no' ? 'active-no' : ''}" onclick="event.stopPropagation(); setTradeValue('${day}','traded','no')">לא</button>
-                  </div>
-                </div>
-
-                <div class="trade-item">
-                  <div class="trade-label">פעלתי לפי הסטאפ</div>
-                  <div class="trade-actions">
-                    <button class="trade-toggle-btn ${d.setup === 'yes' ? 'active-yes' : ''}" onclick="event.stopPropagation(); setTradeValue('${day}','setup','yes')">כן</button>
-                    <button class="trade-toggle-btn ${d.setup === 'no' ? 'active-no' : ''}" onclick="event.stopPropagation(); setTradeValue('${day}','setup','no')">לא</button>
-                  </div>
-                </div>
-
-                <div class="trade-item">
-                  <div class="trade-label">יום ירוק או אדום</div>
-                  <div class="trade-actions">
-                    <button class="trade-color-btn green ${d.color === 'green' ? 'active' : ''}" onclick="event.stopPropagation(); setTradeValue('${day}','color','green')">ירוק</button>
-                    <button class="trade-color-btn red ${d.color === 'red' ? 'active' : ''}" onclick="event.stopPropagation(); setTradeValue('${day}','color','red')">אדום</button>
-                  </div>
-                </div>
-
-                <div class="trade-item">
-                  <div class="trade-label">מרוצה מעצמי</div>
-                  <div class="trade-actions">
-                    <button class="trade-toggle-btn ${d.happy === 'yes' ? 'active-yes' : ''}" onclick="event.stopPropagation(); setTradeValue('${day}','happy','yes')">כן</button>
-                    <button class="trade-toggle-btn ${d.happy === 'no' ? 'active-no' : ''}" onclick="event.stopPropagation(); setTradeValue('${day}','happy','no')">לא</button>
-                  </div>
-                </div>
-
-                <textarea
-                  class="trade-note"
-                  placeholder="הערה אופציונלית..."
-                  oninput="setTradeNote('${day}', this.value)"
-                  onclick="event.stopPropagation()"
-                >${escapeHtml(d.note || "")}</textarea>
-              </div>
-            </div>
-          </div>
-        `;
-      });
-
-      wrap.innerHTML = html;
-
-      const summary = getTradeSummary();
-      document.getElementById("sumTraded").textContent = summary.traded + "/5";
-      document.getElementById("sumSetup").textContent = summary.setup + "/5";
-      document.getElementById("sumGreen").textContent = summary.green + "/5";
-      document.getElementById("sumHappy").textContent = summary.happy + "/5";
-      document.getElementById("tradeDaysCount").textContent = summary.traded;
-    }
-
-    function ensureMonth(month) {
-      if (!yearlyData[month]) {
-        yearlyData[month] = { note: "", open: false };
-      }
-    }
-
-    function toggleMonth(month) {
-      ensureMonth(month);
-      yearlyData[month].open = !yearlyData[month].open;
-      saveYearlyData();
-      renderYearlyCalendar();
-    }
-
-    function setMonthNote(month, value) {
-      ensureMonth(month);
-      yearlyData[month].note = value;
-      saveYearlyData();
-      updateHomeCounters();
-    }
-
-    function renderYearlyCalendar() {
-      const wrap = document.getElementById("monthsGrid");
-      let html = "";
-
-      MONTHS.forEach(month => {
-        ensureMonth(month);
-        const item = yearlyData[month];
-        const hasNote = (item.note || "").trim().length > 0;
-
-        html += `
-          <div class="month-card ${item.open ? 'active' : ''}" onclick="toggleMonth('${month}')">
-            <div class="month-title">${month}</div>
-            <div class="month-sub">${hasNote ? 'יש מיקוד שמור' : 'לחץ להוספה'}</div>
-            ${item.open ? `
-              <textarea
-                class="calendar-note-input"
-                placeholder="כתוב יעד, תזכורת או פוקוס לחודש הזה..."
-                onclick="event.stopPropagation()"
-                oninput="setMonthNote('${month}', this.value)"
-              >${escapeHtml(item.note || "")}</textarea>
-            ` : ``}
-          </div>
-        `;
-      });
-
-      wrap.innerHTML = html;
-    }
-
-    function ensureWeekDay(day) {
-      if (!weeklyCalendarData[day]) {
-        weeklyCalendarData[day] = {
-          open: false,
-          items: []
-        };
-      }
-    }
-
-    function toggleWeekDay(day) {
-      ensureWeekDay(day);
-      weeklyCalendarData[day].open = !weeklyCalendarData[day].open;
-      saveWeeklyCalendarData();
-      renderWeeklyCalendar();
-    }
-
-    function addWeeklyItem(day) {
-      ensureWeekDay(day);
-      weeklyCalendarData[day].items.push({
-        text: "",
-        addToToday: false
-      });
-      saveWeeklyCalendarData();
-      renderWeeklyCalendar();
-    }
-
-    function removeWeeklyItem(day, index) {
-      ensureWeekDay(day);
-      weeklyCalendarData[day].items.splice(index, 1);
-      saveWeeklyCalendarData();
-      renderWeeklyCalendar();
-      renderTodayTasks();
-      updateHomeCounters();
-    }
-
-    function setWeeklyItemText(day, index, value) {
-      ensureWeekDay(day);
-      weeklyCalendarData[day].items[index].text = value;
-      saveWeeklyCalendarData();
-      renderTodayTasks();
-      updateHomeCounters();
-    }
-
-    function setWeeklyItemAddToToday(day, index, value) {
-      ensureWeekDay(day);
-      weeklyCalendarData[day].items[index].addToToday = value;
-      saveWeeklyCalendarData();
-      renderWeeklyCalendar();
-      renderTodayTasks();
-      updateHomeCounters();
-    }
-
-    function renderWeeklyCalendar() {
-      const wrap = document.getElementById("weeklyDaysWrap");
-      let html = "";
-
-      WEEK_DAYS.forEach(day => {
-        ensureWeekDay(day);
-        const d = weeklyCalendarData[day];
-        const activeCount = d.items.filter(item => (item.text || "").trim()).length;
-
-        html += `
-          <div class="week-day-card ${d.open ? 'open' : ''}">
-            <div class="week-day-header" onclick="toggleWeekDay('${day}')">
-              <div>
-                <div class="week-day-title">${day}</div>
-                <div class="week-day-sub">${activeCount} פריטים</div>
-              </div>
-              <div class="week-day-arrow">⌄</div>
-            </div>
-
-            <div class="week-day-body">
-              <div class="week-day-inner">
-                ${d.items.map((item, index) => `
-                  <div class="input-box" style="margin-bottom:12px; padding:14px;">
-                    <div class="week-task-row">
-                      <div class="week-task-label">פריט ביומן</div>
-                      <button class="delete-btn" onclick="event.stopPropagation(); removeWeeklyItem('${day}', ${index})">×</button>
-                    </div>
-
-                    <textarea
-                      class="week-input"
-                      placeholder="כתוב אירוע, משימה, פגישה או משהו חשוב ליום הזה..."
-                      onclick="event.stopPropagation()"
-                      oninput="setWeeklyItemText('${day}', ${index}, this.value)"
-                    >${escapeHtml(item.text || "")}</textarea>
-
-                    <div class="week-task-row" style="padding-bottom:0; border-bottom:none;">
-                      <div class="week-task-label">להוסיף למשימות של היום</div>
-                      <div class="trade-actions">
-                        <button class="mini-btn ${item.addToToday ? 'active-yes' : ''}" onclick="event.stopPropagation(); setWeeklyItemAddToToday('${day}', ${index}, true)">כן</button>
-                        <button class="mini-btn ${item.addToToday === false ? 'active-no' : ''}" onclick="event.stopPropagation(); setWeeklyItemAddToToday('${day}', ${index}, false)">לא</button>
-                      </div>
-                    </div>
-                  </div>
-                `).join("")}
-
-                <button class="add-btn" style="width:100%; height:52px;" onclick="event.stopPropagation(); addWeeklyItem('${day}')">הוסף פריט ליום ${day}</button>
-              </div>
-            </div>
-          </div>
-        `;
-      });
-
-      wrap.innerHTML = html;
-    }
-
-    function getCalendarTasksForToday() {
-      ensureWeekDay(TODAY_NORMALIZED);
-      return (weeklyCalendarData[TODAY_NORMALIZED]?.items || [])
-        .map((item, index) => ({ ...item, index }))
-        .filter(item => item.addToToday && (item.text || "").trim())
-        .map(item => ({
-          id: `calendar-${TODAY_NORMALIZED}-${item.index}`,
-          text: item.text.trim(),
-          source: "calendar",
-          done: false
-        }));
-    }
-
-    function addManualTask() {
-      const input = document.getElementById("manualTaskInput");
-      if (!input) return;
-      const text = input.value.trim();
-      if (!text) return;
-      if (manualTasks.length >= 10) {
-        alert("אפשר להוסיף עד 10 משימות ידניות להיום.");
-        return;
-      }
-
-      manualTasks.push({
-        id: "manual-" + Date.now(),
-        text,
-        done: false
-      });
-
-      input.value = "";
-      saveManualTasks();
-      renderTodayTasks();
-      updateHomeCounters();
-    }
-
-    function toggleManualTask(id) {
-      manualTasks = manualTasks.map(task =>
-        task.id === id ? { ...task, done: !task.done } : task
-      );
-      saveManualTasks();
-      renderTodayTasks();
-    }
-
-    function deleteManualTask(id) {
-      manualTasks = manualTasks.filter(task => task.id !== id);
-      saveManualTasks();
-      renderTodayTasks();
-      updateHomeCounters();
-    }
-
-    function getTodayTasksCombined() {
-      const calendarTasks = getCalendarTasksForToday();
-      const manual = manualTasks.map(task => ({ ...task, source: "manual" }));
-      return [...calendarTasks, ...manual];
-    }
-
-    function renderTodayTasks() {
-      const wrap = document.getElementById("todayTasksList");
-      if (!wrap) return;
-
-      const tasks = getTodayTasksCombined();
-
-      document.getElementById("todayTasksSummaryCount").textContent = tasks.length;
-
-      if (tasks.length === 0) {
-        wrap.innerHTML = `
-          <div class="task-box">
-            <div class="section-title" style="font-size:22px; margin-bottom:8px;">אין משימות כרגע</div>
-            <div class="section-subtitle" style="margin:0;">תוכל להוסיף משימה ידנית או לסמן פריטים מהיומן השבועי שיופיעו כאן.</div>
-          </div>
-        `;
-        updateHomeCounters();
-        return;
-      }
-
-      wrap.innerHTML = tasks.map(task => {
-        const isManual = task.source === "manual";
-        const doneClass = isManual && task.done ? "done" : "";
-
-        return `
-          <div class="task-item ${doneClass}">
-            <div class="task-left">
-              <div class="task-check" onclick="${isManual ? `toggleManualTask('${task.id}')` : `void(0)`}">${isManual && task.done ? '✓' : ''}</div>
-              <div class="task-text">
-                <div class="task-title">${escapeHtml(task.text)}</div>
-                <div class="task-right" style="margin-top:8px;">
-                  ${task.source === "calendar" ? `<span class="source-badge">נוסף מהיומן</span>` : `<span class="calendar-badge">ידני</span>`}
-                </div>
-              </div>
-            </div>
-            <div class="task-right">
-              ${isManual ? `<button class="delete-btn" onclick="deleteManualTask('${task.id}')">×</button>` : ``}
-            </div>
-          </div>
-        `;
-      }).join("");
-
-      updateHomeCounters();
-    }
-
-    function getYearlyNotesCount() {
-      return MONTHS.filter(month => (yearlyData[month]?.note || "").trim()).length;
-    }
-
-    function getWeeklyEventsCount() {
-      let count = 0;
-      WEEK_DAYS.forEach(day => {
-        ensureWeekDay(day);
-        count += (weeklyCalendarData[day].items || []).filter(item => (item.text || "").trim()).length;
-      });
-      return count;
-    }
-
-    function updateHomeCounters() {
-      const yearlyCountEl = document.getElementById("yearlyNotesCount");
-      const weeklyCountEl = document.getElementById("weeklyEventsCount");
-      const todayCountEl = document.getElementById("todayTasksCount");
-
-      if (yearlyCountEl) yearlyCountEl.textContent = getYearlyNotesCount();
-      if (weeklyCountEl) weeklyCountEl.textContent = getWeeklyEventsCount();
-      if (todayCountEl) todayCountEl.textContent = getTodayTasksCombined().length;
-    }
-
-    updateWorkoutUI();
-    renderTrading();
-    renderYearlyCalendar();
-    renderWeeklyCalendar();
-    renderTodayTasks();
-    updateHomeCounters();
-  </script>
 </body>
 </html>
